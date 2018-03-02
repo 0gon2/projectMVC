@@ -9,54 +9,7 @@
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
- <script type="text/javascript">
-	var httpRequest = null;
-	
-	function sendRequest(url, params, callback, method){
-		httpRequest = new XMLHttpRequest();   
-		var httpMethod = method?method:'GET'; /*='GET'  */
-		if(httpMethod!='GET' && httpMethod !='POST'){
-			httpMethod='GET';
-		}
-		
-		var httpParams = (params==null || params =='')?null:params; 
-		var httpUrl = url;                            /* 포스트 방식일때 url */
-		if(httpMethod=='GET' && httpParams !=null){
-			httpUrl=httpUrl+"?"+httpParams;           /* 겟 방식일때 url */
-		}
-		
-		httpRequest.open(httpMethod,httpUrl, true);
-		httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		httpRequest.onreadystatechange=callback;
-		httpRequest.send(httpMethod=='POST'?httpParams:null);
-	}
-	
-	function helloToServer(type){
-		if(type=='esname'){
-		var params ="esname="+encodeURIComponent(document.f.esname.value)+"&index=1&msname="+${msname}+"&hsname="+${hsname}+"&emtid="+${emtid}+"&midid="+${midid}+"&highid="+${highid};
-		sendRequest("",params,helloFromServer,"POST");
-		}
-	 	if(type=='msname'){
-		var params ="msname="+encodeURIComponent(document.g.msname.value)+"&index=2&esname="+${esname}+"&hsname="+${hsname}+"&emtid="+${emtid}+"&midid="+${midid}+"&highid="+${highid};
-		sendRequest("searchList",params,helloFromServer,"POST");
-		}
-		if(type=='hsname'){
-		var params ="hsname="+encodeURIComponent(document.h.hsname.value)+"&index=3&esname="+${esname}+"msname="+${msname}+"&emtid="+${emtid}+"&midid="+${midid}+"&highid="+${highid};
-		sendRequest("searchList",params,helloFromServer,"POST");
-		} 
-	}
-	
-	function helloFromServer(){
-		if(httpRequest.readyState==4){
-			if(httpRequest.status==200){
-				document.getElementById("aaa").innerHTML=httpRequest.responseText
-				document.getElementById("bbb").innerHTML=httpRequest.responseText
-				document.getElementById("ccc").innerHTML=httpRequest.responseText
-			}
-		}
-	}
-	
-</script>
+ 
 <style>
 * {
   box-sizing: border-box;
@@ -138,8 +91,57 @@ button:hover {
 }
 </style>
 <body>
-<!-- 로그인 모달 -->
-  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
+
+<script type="text/javascript">
+	var httpRequest = null;
+	
+	function sendRequest(url, params, callback, method){
+		httpRequest = new XMLHttpRequest();   
+		var httpMethod = method?method:'GET'; /*='GET'  */
+		if(httpMethod!='GET' && httpMethod !='POST'){
+			httpMethod='GET';
+		}
+		
+		var httpParams = (params==null || params =='')?null:params; 
+		var httpUrl = url;                            /* 포스트 방식일때 url */
+		if(httpMethod=='GET' && httpParams !=null){
+			httpUrl=httpUrl+"?"+httpParams;           /* 겟 방식일때 url */
+		}
+		
+		httpRequest.open(httpMethod,httpUrl, true);
+		httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		httpRequest.onreadystatechange=callback;
+		httpRequest.send(httpMethod=='POST'?httpParams:null);
+	}
+	
+	function helloToServer(type){
+		if(type=='esname'){
+			var params ="esname="+encodeURIComponent(document.f.esname.value)+"&index=1&msname=${msname}&hsname=${hsname}&emtid=${emtid}&midid=${midid}&highid=${highid}";
+			sendRequest("searchList",params,helloFromServer,"POST");
+		}
+		if(type=='msname'){
+			var params ="msname="+encodeURIComponent(document.g.msname.value)+"&index=2&esname=${esname}&hsname=${hsname}&emtid=${emtid}&midid=${midid}&highid=${highid}";
+			sendRequest("searchList",params,helloFromServer,"POST");
+		}
+		if(type=='hsname'){
+			var params ="hsname="+encodeURIComponent(document.h.hsname.value)+"&index=3&esname=${esname}&msname=${msname}&emtid=${emtid}&midid=${midid}&highid=${highid}";
+			sendRequest("searchList",params,helloFromServer,"POST");
+		} 
+	}
+	function helloFromServer(){
+		if(httpRequest.readyState==4){
+			if(httpRequest.status==200){
+				document.getElementById("aaa").innerHTML=httpRequest.responseText
+				document.getElementById("bbb").innerHTML=httpRequest.responseText
+				document.getElementById("ccc").innerHTML=httpRequest.responseText
+			}
+		}
+	}
+	
+</script>
+
+<!-- 로그인폼  -->
+<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large">Login</button>
 
 <div class="w3-container">
   <div id="id01" class="w3-modal">
@@ -168,6 +170,7 @@ button:hover {
     </div>
   </div>
 </div>
+
 <!-- 학교 찾는 모달02(초) -->
 <div id="id02" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
@@ -179,11 +182,11 @@ button:hover {
         <div class="w3-section">
           <label><b>학교검색</b></label>
           <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="esname" required>
-          <input class="w3-button w3-block w3-blue w3-section w3-padding" type="button" onclick="helloToServer('esname')" value="찾기">
+          <input class="w3-button w3-block w3-blue w3-section w3-padding" type="button" 
+          onclick="helloToServer('esname')" value="찾기">
         </div>
       </form>
       <div class="w3-container" id="aaa"></div>
-      
       
       <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
         <button onclick="document.getElementById('id02').style.display='none'" type="button" class="w3-button w3-red w3-right">Cancel</button>
@@ -216,8 +219,6 @@ button:hover {
 
     </div>
   </div>
-
-
 <!-- 학교 찾는 모달04(고) -->
 <div id="id04" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">

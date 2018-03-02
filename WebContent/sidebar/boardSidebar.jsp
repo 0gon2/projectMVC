@@ -18,10 +18,9 @@
 .w3-btn {background-color:#4CAF50;margin-bottom:4px}
 .w3-code{border-left:4px solid #4CAF50}
 .myMenu {margin-bottom:150px}
-html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+
 
 </style>
-
 <body class="w3-theme-l5">
 <div class="w3-top" >
   <div class="w3-row w3-white w3-padding">
@@ -40,9 +39,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
    <img src="/Project/images/school1.png" ></a>
    
    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-small w3-hover-white w3-padding-16" 
-   href="myPage" >메인</a>
+   href="<%=request.getContextPath()%>/mainPage/main.jsp" >메인</a>
    <a class="w3-bar-item w3-button w3-hide-medium w3-hover-white w3-padding-16" 
-   href="schoolBoard" >게시판</a>
+   href="<%=request.getContextPath()%>/board/schoolmateList.jsp" >게시판</a>
    <a class="w3-bar-item w3-button w3-hide-medium w3-hover-white w3-padding-16" 
    href="<%=request.getContextPath()%>/header/lounge.jsp" >라운지</a>
    
@@ -81,9 +80,28 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
  	</div>
  	
   </div>
+  <div class="w3-sidebar w3-bar-block w3-white " style="z-index:3;width:260px;" >
+  <div class="w3-padding-50 w3-large w3-text-grey" style="font-weight:bold; margin-top:20px ">
+  <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px">
+  
+    <h4>학생 명단</h4>
+  <a class="w3-bar-item w3-button" href="/Project/board/schoolmateList.jsp?index=1">${schemt }</a>
+  <a class="w3-bar-item w3-button" href="/Project/board/schoolmateList.jsp?index=2">${schmid }</a>
+  <a class="w3-bar-item w3-button" href="/Project/board/schoolmateList.jsp?index=3">${schhigh }</a>
+  
+  </div>
 </div>
+ </div>
+
+  
+</div>
+
+
+
 
 
 
 </body>
 </html>
+  
+   

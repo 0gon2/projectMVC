@@ -10,11 +10,6 @@ import java.util.List;
 
 
 
-
-
-
-
-
 public class MemberDAO {
 	// 싱글턴 메소드(1)
 	private static MemberDAO instance = new MemberDAO();
