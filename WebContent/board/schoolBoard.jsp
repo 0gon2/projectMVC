@@ -28,11 +28,7 @@
 			</table>
 		</c:if>
 		<c:if test="${count!=0 }">
-		<%
-			} else {
-		%>
-		
-		<p class="w3-large" style="font-style:italic;"><%=hakmungu %> 학생명단</p>
+		<p class="w3-large" style="font-style:italic;">${hakmungu} 학생명단</p>
 		<table width="100%" bordercolor="w3-blue" style="border-collapse:collapse;">
 			<tr height="30" class="w3-blue" align="center" >
 				<td align="center" width="6%">번호</td>
@@ -40,75 +36,49 @@
 				<td align="center" width="11%">생년월일</td>
 				<td align="center" width="24%">가입일자</td>
 			</tr>
-			<%
-				String name= (String)session.getAttribute("name");
-				for (int i = 0; i < articleList.size(); i++) {
-						SmemberVO article = (SmemberVO) articleList.get(i);
-						String gname=article.getName();
-			%>
+			<c:forEach var="member" items="${articleList }">
+			
 			<tr height="30" align="center" >
-			
-			
-		
-				<td align="center" width="6%"><%=number--%></td>
-				<td class="w3-dropdown-hover " align="center" style=" width:100%;">
-				<%=article.getName()%>
-				
-				 <%if(!gname.equals(name)){
-				 %>
-				 
+				<td align="center" width="6%">${number}</td>
+				<c:set var="number" value="${number-1 }"/>
+				<td class="w3-dropdown-hover " 
+				align="center" style="width:100%;">${member.name}
 		<div class="w3-dropdown-content w3-bar-block w3-card-4" style="right:10px">
-<a href="/Project/mainPage/main.jsp?pageId=<%=article.getMemberid() %>&scname=<%=article.getName() %>&schemt=<%=article.getSch_emt() %>&schmid=<%=article.getSch_mid()%>&schhigh=<%=article.getSch_high() %>" class="w3-bar-item w3-button">'<%=article.getName()%>'님 페이지</a>
+				<c:if test="${member.name!=name }">
+<a href="mainPage?pageId=${member.memberid }" class="w3-bar-item w3-button">
+'${member.name }'님 페이지</a>
 <a href="#" class="w3-bar-item w3-button">친구추가</a>
 <a href="#" class="w3-bar-item w3-button">쪽지보내기</a>
+</c:if>
         </div></td>
-				 
-				 <%
-				 	 }
-				 %>
-				<td align="center" width="11%"><%=article.getBirthday()%></td>
-				<td align="center" width="24%"><%=sdf.format(article.getJoindate())%></td>
+			
+				<td align="center" width="11%">${member.birthday}</td>
+				<td align="center" width="24%">${member.joindate}</td>
 			</tr>
-			<%
-				}
-			%>
+			</c:forEach>
 		</table>
-		
 		</c:if>
 
 		<div class="w3-center">
-			<%
-				int bottomLine = 5;
-				if (count > 0) {
-					int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
-					int startPage = 1 + (currentPage - 1) / bottomLine * bottomLine;
-					int endPage = startPage + bottomLine - 1;
-					if (endPage > pageCount)
-						endPage = pageCount;
-					if (startPage > bottomLine) {
-			%>
-			<a href="schoolmateList.jsp?pageNum=<%=startPage - bottomLine%>&index=<%=index%>">[이전]</a>
-			<%
-					}
-			%>
-			<%
-				for (int i = startPage; i <= endPage; i++) {
-			%>
-			<a href="schoolmateList.jsp?pageNum=<%=i%>&index=<%=index%>"> <%
- 				if (i != currentPage)
- 				out.print("[" + i + "]");
- 				else
- 				out.print("<font color='red'>[" + i + "]</font>");
- 			%></a>
-			<%
-				}
-					if (endPage < pageCount) {
-			%>
-			<a href="schoolmateList.jsp?pageNum=<%=startPage + bottomLine%>&index=<%=index%>">[다음]</a>
-			<%
-					}
-				}
-			%>
+		<c:if test="${count>0 }">
+			
+			<c:if test="${startPage>bottomLine }">
+			<a href="schoolBoard?pageNum=${startPage - bottomLine}&index=${index }">[이전]</a>
+			</c:if>
+			
+			<c:forEach var="i" begin="${startPage }" end="${endPage}">
+			<a href="schoolBoard?pageNum=${i }&index=${index}">
+					<c:if test="${i!=currentPage }">[${i}]</c:if>
+				<c:if test="${i==currentPage }">[${i}]
+				<font color='red'></font></c:if>
+ 			</a>
+			</c:forEach>
+			<c:if test="${endPage<pageCount }">
+				<a href="schoolBoard?pageNum=${startPage + bottomLine}&index=${index }">[다음]</a>
+			</c:if>
+			
+		</c:if>
+		
 		</div>
 		<div class="w3-right">
 		  <form action="">

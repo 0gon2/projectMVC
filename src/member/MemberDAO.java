@@ -10,6 +10,7 @@ import java.util.List;
 
 
 
+
 public class MemberDAO {
 	// 싱글턴 메소드(1)
 	private static MemberDAO instance = new MemberDAO();
@@ -132,7 +133,6 @@ public class MemberDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "";
-		int number = 0;
 		try {
 			sql = "insert into member(memberid, password,name,birthday,sch_emt,sch_mid,sch_high,";
 			sql += " joindate, point, emtid, midid, highid) values(?,?,?,?,?,?,?,sysdate,?,?,?,?)";
@@ -178,18 +178,17 @@ public class MemberDAO {
 
 	}
 	
-	
-	public void defaultRelation(String myId) {
+	//친구요청보내기
+	public void addRequest(String myId ,String otherId) {
 		Connection con = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "";
-		int number = 0;
 		try {
 			sql = "insert into relation(myid, otherid, status) values(?,?,?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, myId);
-			pstmt.setString(2, myId);
+			pstmt.setString(2, otherId);
 			pstmt.setInt(3, 1);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -200,7 +199,88 @@ public class MemberDAO {
 
 	}
 	
+	public void acceptRequest(String myId, String otherId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = getConnection();
+			String sql = "update relation set status=2 "
+					+ "where (myid=? and otherid=?) or (myid=? and otherid=?) ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, myId);
+			pstmt.setString(2, otherId);
+			pstmt.setString(3, otherId);
+			pstmt.setString(4, myId);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			close(conn, pstmt, null);
+		}
+	}
 	
+	
+	
+	public String identifyRequest(String myId, String otherid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		String statement = null;
+		try {
+			con=getConnection();
+			sql = "select myid from relation where myid=? and otherid=?"
+					+ " and status=1";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, myId);
+			pstmt.setString(2, otherid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				statement = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			close(con, pstmt, rs);
+		}
+		return statement;
+	}
+	
+	
+	
+	
+	
+	
+	public String getStatus(String myId, String otherid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		String status = null;
+		try {
+			con=getConnection();
+			sql = "select status from relation where (myid=? and otherid=?) or"
+					+ "(myid=? and otherid=?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, myId);
+			pstmt.setString(2, otherid);
+			pstmt.setString(3, otherid);
+			pstmt.setString(4, myId);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				status = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			close(con, pstmt, rs);
+		}
+		return status;
+	}
 	
 	//학교 명단 추출하는 메소드
 	@SuppressWarnings("resource")
@@ -274,9 +354,73 @@ public class MemberDAO {
 		return articleList;
 	}
 	
+	public List reqList(String id) {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List articleList = null;
+		String sql = "";
+		try {
+			conn = getConnection();
+			sql = " SELECT name, memberid from MEMBER, RELATION "
+				+ "where myid=memberid and status=1 and otherid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				articleList = new ArrayList();
+				do {
+					MemberVO article = new MemberVO();
+					article.setName(rs.getString("name"));
+					article.setMemberid(rs.getString("memberid"));
+					articleList.add(article);
+				} while (rs.next());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return articleList;
+	}
 	
-	
-	
+	public List friendList(String id) {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List articleList = null;
+		String sql = "";
+		try {
+			conn = getConnection();
+			sql = " SELECT name, memberid FROM MEMBER WHERE "
+					+ "MEMBERID in "
+					+ "(SELECT otherid from relation "
+					+ "where myid=? AND status=2) OR "
+					+ "MEMBERID in "
+					+ "(SELECT myid from relation "
+					+ "where otherid=? AND status=2)";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				articleList = new ArrayList();
+				do {
+					MemberVO article = new MemberVO();
+					article.setName(rs.getString("name"));
+					article.setMemberid(rs.getString("memberid"));
+					articleList.add(article);
+				} while (rs.next());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return articleList;
+	}
 	//회원전체 리스트 
 	public List getAllmember(int startRow, int endRow) {
 		Connection conn = getConnection();
@@ -364,7 +508,30 @@ public class MemberDAO {
 		return number;
 	}
 	
-	
+	public int reqeustCount(String myid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		int number = 0;
+		try {
+			con=getConnection();
+			sql = "select nvl(count(*),0) from relation where otherid=?"
+					+ "and status=1";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, myid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				number = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			close(con, pstmt, rs);
+		}
+		return number;
+	}
 	
 	
 	
@@ -402,13 +569,14 @@ public class MemberDAO {
 		String sql = "";
 		try {
 			conn = getConnection();
-			sql = "select name,sch_emt, sch_mid, sch_high, birthday "
+			sql = "select memberid, name,sch_emt, sch_mid, sch_high, birthday "
 					+ "from member where memberid=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1,memberid);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				article = new MemberVO();
+				article.setMemberid(rs.getString("memberid"));
 				article.setName(rs.getString("name"));
 				article.setSch_emt(rs.getString("sch_emt"));
 				article.setSch_mid(rs.getString("sch_mid"));
@@ -422,6 +590,8 @@ public class MemberDAO {
 		}
 		return article;
 	}
-
+	
+	
+	
 	
 }

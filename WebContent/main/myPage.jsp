@@ -3,34 +3,36 @@
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-
-</head>
-<body>
 
 <!-- 사이드 바 -->
 <div class="w3-sidebar w3-bar-block w3-collapse" 
-style="z-index:3;width:270px" id="mySidebar">
-	<p></p>
+style="z-index:3;width:260px" id="mySidebar">
   <!-- 프로필 -->
-     <div class="w3-card w3-round w3-white">
+     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px; margin-top:10px">
         <div class="w3-container">
          <h4 class="w3-center">Profile</h4>
-         <p class="w3-center"><img src="<%=request.getContextPath()%>/images/defaultprofile.jpg" 
+         <p class="w3-center">
+         <img src="<%=request.getContextPath()%>/images/defaultprofile.jpg" 
          class="w3-circle" style="height:106px;width:106px" ></p>
          <hr>
          <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> ${name }</p>
          <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
-         <a href="/Project/board/schoolmateList.jsp?index=1">${aditemt}</a>, 
-         <a href="/Project/board/schoolmateList.jsp?index=2">${aditmid}</a>,
-         <a href="/Project/board/schoolmateList.jsp?index=3">${adithigh}</a></p>
+         <a href="schoolBoard">${aditemt}</a>, 
+         <a href="schoolBoard?index=2">${aditmid}</a>,
+         <a href="schoolBoard?index=3">${adithigh}</a></p>
          <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> March 15, 1992 </p>
         </div>
       </div>
-      <div>
-  			사진첩 같은거
+      <div class="w3-container w3-round w3-left">
+  			<select>
+  			  <option>&nbsp;[친구목록]&nbsp;</option>
+  			  <c:forEach items="${friendList }" var="friendList">
+			  <option onclick="window.location='mainPage?pageId=${friendList.memberid}'">
+			  ${friendList.name}</option>
+			  </c:forEach>
+			</select>
+  			
       </div>
         <div class="w3-card w3-round w3-light-white w3-center">
         <div class="w3-container">
@@ -49,7 +51,7 @@ style="z-index:3;width:270px" id="mySidebar">
 style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- Main content: shift it to the right by 270 pixels when the sidebar is visible -->
-<div class="w3-main w3-container" style="margin-left:270px;margin-top:117px;">
+<div class="w3-main w3-container" style="margin-left:270px;margin-top:79px;">
  <!-- The Grid -->
  <p>
   <div class="w3-row">
@@ -153,5 +155,4 @@ function w3_show_nav(name) {
 <script>
 w3CodeColor();
 </script>
-</body>
 </html>

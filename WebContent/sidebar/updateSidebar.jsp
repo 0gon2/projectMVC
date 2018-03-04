@@ -111,16 +111,16 @@
  
  
   <div class="w3-bar w3-blue-grey w3-large" style="z-index:4;">
-   <a class="w3-left" href="<%=request.getContextPath()%>/mainPage/main.jsp" 
+   <a class="w3-left" href="mainPage" 
    style="margin-top:15px; margin-left:15px; margin-right:15">
    <img src="/Project/images/school1.png" ></a>
    
    <a class="w3-bar-item w3-button w3-hide-medium w3-hide-small w3-hover-white w3-padding-16" 
-   href="<%=request.getContextPath()%>/mainPage/main.jsp" >메인</a>
+   href="mainPage" >메인</a>
    <a class="w3-bar-item w3-button w3-hide-medium w3-hover-white w3-padding-16" 
-   href="<%=request.getContextPath()%>/board/schoolmateList.jsp" >게시판</a>
+   href="schoolBoard" >게시판</a>
    <a class="w3-bar-item w3-button w3-hide-medium w3-hover-white w3-padding-16" 
-   href="<%=request.getContextPath()%>/header/lounge.jsp" >라운지</a>
+   href="lounge" >라운지</a>
    
    <!-- 알림창 -->
     <div class="w3-dropdown-hover w3-hide-small">
@@ -146,11 +146,11 @@
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;right:1px">
       <a href="updateLoginForm" 
       class="w3-bar-item w3-button">회원정보</a>
-      <a href="<%=request.getContextPath()%>/start/logoutPro.jsp" 
+      <a href="logout" 
       class="w3-bar-item w3-button">로그아웃</a>
 
 	<c:if test="${myId=='admin'}">
-      		<a href="<%=request.getContextPath()%>/mainPage/admin.jsp" 
+      		<a href="admin" 
       		class="w3-bar-item w3-button">[회원관리]</a>
 	</c:if>
     </div>

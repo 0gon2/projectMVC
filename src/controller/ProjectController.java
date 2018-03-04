@@ -103,7 +103,6 @@ public class ProjectController extends Action {
 			member.setSch_high(request.getParameter("sch_high"));
 			MemberDAO dbPro = MemberDAO.getInstance();
 			dbPro.insertMember(member);
-			dbPro.defaultRelation(member.getMemberid());
 			response.sendRedirect(request.getContextPath()+"/gon/loginForm");
 			 return null; 
 			} 
@@ -111,6 +110,15 @@ public class ProjectController extends Action {
 	public String loginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
 			 return "/start/loginForm.jsp"; 
+			} 
+	
+	
+	public String logout(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		HttpSession session = request.getSession();
+		session.invalidate();
+		response.sendRedirect(request.getContextPath()+"/gon/loginForm");
+			 return null; 
 			} 
 	
 	public String loginPro(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -122,12 +130,20 @@ public class ProjectController extends Action {
 		int pwcheck = dbPro.login(id, pass);
 		if(pwcheck==1) {
 			MemberVO mVO=dbPro.getUserInfo(id);
+			int reqCount = dbPro.reqeustCount(id);
+			List reqList=dbPro.reqList(id);
+			List friendList=dbPro.friendList(id);
+			
+			
 			String name=mVO.getName();
 			String schemt=mVO.getSch_emt();
 			String schmid=mVO.getSch_mid();
 			String schhigh=mVO.getSch_high();
 			int birthday=mVO.getBirthday();
 			HttpSession session = req.getSession();
+			session.setAttribute("friendList", friendList);	
+			session.setAttribute("reqCount", reqCount);	
+			session.setAttribute("reqList", reqList);	
 			session.setAttribute("name", name);	
 			session.setAttribute("schemt", schemt);	
 			session.setAttribute("schmid", schmid);	
@@ -135,7 +151,7 @@ public class ProjectController extends Action {
 			session.setAttribute("birthday", birthday);	
 			session.setAttribute("myId",id);
 			session.setAttribute("password",pass);
-			res.sendRedirect(req.getContextPath()+"/gon/myPage");
+			res.sendRedirect(req.getContextPath()+"/gon/mainPage");
 		}else {
 			req.setAttribute("pwcheck",pwcheck);
 			return "/start/loginPro.jsp";
@@ -143,46 +159,91 @@ public class ProjectController extends Action {
 		return null;
 	}
 	
-	public String myPage(HttpServletRequest request,
+	public String mainPage(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
 		HttpSession session = request.getSession();
 		String pageId= request.getParameter("pageId");
+		
 		if(pageId==null) {
 			pageId=(String)session.getAttribute("myId");
 		}
 		String myId= (String)session.getAttribute("myId");
 		
-		MemberDAO dbPro = MemberDAO.getInstance();
-		MemberVO otherInfo=dbPro.getUserInfo(pageId);
-		
-		String schemt=otherInfo.getSch_emt();
-		String schmid=otherInfo.getSch_mid();
-		String schhigh=otherInfo.getSch_high();
-		String name=otherInfo.getName();
-		String aditemt=schemt.substring(0,schemt.length()-3);
-		String aditmid=schmid.substring(0,schmid.length()-2);
-		String adithigh=schhigh.substring(0,schhigh.length()-3);
 		if(pageId.equals(myId)) {
-			schemt=(String)session.getAttribute("schemt");
-			schmid=(String)session.getAttribute("schmid");
-			schhigh=(String)session.getAttribute("schhigh");
-			aditemt=schemt.substring(0,schemt.length()-3);
-			aditmid=schmid.substring(0,schmid.length()-2);
-			adithigh=schhigh.substring(0,schhigh.length()-3);
+			String schemt=(String)session.getAttribute("schemt");
+			String schmid=(String)session.getAttribute("schmid");
+			String schhigh=(String)session.getAttribute("schhigh");
+			String aditemt=schemt.substring(0,schemt.length()-3);
+			String aditmid=schmid.substring(0,schmid.length()-2);
+			String adithigh=schhigh.substring(0,schhigh.length()-3);
 			request.setAttribute("aditemt", aditemt);
 			request.setAttribute("aditmid", aditmid);
 			request.setAttribute("adithigh", adithigh);
 			return "/main/myPage.jsp"; 
 		}
-		
-		request.setAttribute("aditemt", aditemt);
-		request.setAttribute("name", name);
-		request.setAttribute("aditmid", aditmid);
-		request.setAttribute("adithigh", adithigh);
-		return "/main/otherPage.jsp";
+		else {
+			MemberDAO dbPro = MemberDAO.getInstance();
+			MemberVO otherInfo=dbPro.getUserInfo(pageId);
+			String schemt=otherInfo.getSch_emt();
+			String schmid=otherInfo.getSch_mid();
+			String schhigh=otherInfo.getSch_high();
+			String name=otherInfo.getName();
+			String aditemt=schemt.substring(0,schemt.length()-3);
+			String aditmid=schmid.substring(0,schmid.length()-2);
+			String adithigh=schhigh.substring(0,schhigh.length()-3);
+			String addReq=request.getParameter("addReq");
+			String acceptReq= request.getParameter("acceptReq");
+			String statement= null;
+			if(addReq==null) {
+				addReq="0";
+			}
+			if(acceptReq==null) {
+				acceptReq="0";
+			}
+			if(addReq.equals("1")) {
+				dbPro.addRequest(myId, pageId);
+			}
+			if(acceptReq.equals("1")) {
+				dbPro.acceptRequest(myId, pageId);
+			}
+			
+			String status=dbPro.getStatus(myId, pageId);
+			
+			if(status==null) {
+				statement="1";
+			}else if(status.equals("1")){
+				
+				String identify1 = dbPro.identifyRequest(myId, pageId);
+				String identify2 = dbPro.identifyRequest(pageId, myId);
+				if(identify1==null) {
+					identify1="";
+				}else if(identify1.equals(myId)) {
+					statement="2";
+				}
+				if(identify2==null) {
+					identify2="";
+				}else if(identify2.equals(pageId)) {
+					statement="3";
+				}
+			}else {
+				session.setAttribute("reqCount", dbPro.reqeustCount(myId));
+				session.setAttribute("reqList", dbPro.reqList(myId));
+				session.setAttribute("friendList", dbPro.friendList(myId));
+				statement="4";
+			}
+			
+			request.setAttribute("status", status);
+			request.setAttribute("statement", statement);
+			request.setAttribute("name", name);
+			request.setAttribute("pageId", pageId);
+			
+			request.setAttribute("aditemt", aditemt);
+			request.setAttribute("aditmid", aditmid);
+			request.setAttribute("adithigh", adithigh);
+			return "/main/otherPage.jsp";
+		}
 		
 	} 
-	
 	public String updateLoginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
 			 return "/update/updateLoginForm.jsp"; 
@@ -224,7 +285,6 @@ public class ProjectController extends Action {
 		if (pageNum == null || pageNum == "") {
 			pageNum = "1";
 		}
-		
 		String hakmungu=null;
 		int pageSize = 5;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -261,8 +321,24 @@ public class ProjectController extends Action {
 		}
 		number = count - (currentPage - 1) * pageSize;
 		
+		int bottomLine = 5;
+		if (count > 0) {
+			int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
+			int startPage = 1 + (currentPage - 1) / bottomLine * bottomLine;
+			int endPage = startPage + bottomLine - 1;
+			if (endPage > pageCount)
+				endPage = pageCount;
+			request.setAttribute("startPage", startPage);
+			request.setAttribute("endPage", endPage);
+			}
+		
+		request.setAttribute("index", index);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("bottomLine", bottomLine);
 		request.setAttribute("count", count);
 		request.setAttribute("hakmungu", hakmungu);
+		request.setAttribute("articleList", articleList);
+		request.setAttribute("number", number);
 		
 		
 		
