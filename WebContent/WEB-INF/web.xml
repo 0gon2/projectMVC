@@ -26,6 +26,11 @@
   	<url-pattern>/board/*</url-pattern>
   	<include-prelude>/sidebar/boardSidebar.jsp</include-prelude>
   	</jsp-property-group>
+  	
+  	<jsp-property-group>
+  	<url-pattern>/lounge/*</url-pattern>
+  	<include-prelude>/header/loungeHeader.jsp</include-prelude>
+  	</jsp-property-group>
   </jsp-config> 
   
   <!--필터링 -->

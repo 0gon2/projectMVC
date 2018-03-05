@@ -8,11 +8,11 @@
 
 
 body {
+  /*     background-image: url("/projectMVC/images/background.jpg");
+      background-size: cover;
+      background-attachment: fixed; */
 
 font-family: Arial, Helvetica, sans-serif;}
-     /*  background-image: url("/Project_AllEars/img/main.jpg");
-      background-size: cover;
-      background-attachment: fixed;} */
 
 /* Full-width input fields */
 input[type=text], input[type=password] {

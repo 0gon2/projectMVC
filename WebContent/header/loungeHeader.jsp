@@ -3,101 +3,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
 <style>
+ @import url(//fonts.googleapis.com/earlyaccess/jejuhallasan.css); 
 .w3-theme {color:#fff !important;background-color:#4CAF50 !important}
 .w3-btn {background-color:#4CAF50;margin-bottom:4px}
 .w3-code{border-left:4px solid #4CAF50}
 .myMenu {margin-bottom:150px}
+#me { position : relative; 	left: 30px;}
+#you { position : relative; left: 200px;}
+html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 
 </style>
-<style type="text/css">
-.form-style-2{
-	max-width: 500px;
-	padding: 20px 12px 10px 20px;
-	font: 13px Arial, Helvetica, sans-serif;
-}
-.form-style-2-heading{
-	font-style: italic;
-	border-bottom: 2px solid #ddd;
-	margin-bottom: 20px;
-	font-size: 15px;
-	padding-bottom: 3px;
-}
-.form-style-2 label{
-	display: block;
-	margin: 0px 0px 15px 0px;
-}
-.form-style-2 label > span{
-	width: 100px;
-	font-weight: bold;
-	float: left;
-	padding-top: 8px;
-	padding-right: 5px;
-}
-.form-style-2 span.required{
-	color:red;
-}
-.form-style-2 .tel-number-field{
-	width: 40px;
-	text-align: center;
-}
-.form-style-2 input.input-field{
-	width: 48%;
-	
-}
 
-.form-style-2 input.input-field, 
-
- .form-style-2 .select-field{
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	border: 1px solid #C2C2C2;
-	box-shadow: 1px 1px 4px #EBEBEB;
-	-moz-box-shadow: 1px 1px 4px #EBEBEB;
-	-webkit-box-shadow: 1px 1px 4px #EBEBEB;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	padding: 7px;
-	outline: none;
-}
-.form-style-2 .input-field:focus, 
-  
-.form-style-2 .select-field:focus{
-	border: 1px solid #0C0;
-}
-
-.form-style-2 input[type=submit],
-.form-style-2 input[type=button]{
-	border: none;
-	padding: 8px 15px 8px 15px;
-	background: #FF8500;
-	color: #fff;
-	box-shadow: 1px 1px 4px #DADADA;
-	-moz-box-shadow: 1px 1px 4px #DADADA;
-	-webkit-box-shadow: 1px 1px 4px #DADADA;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-}
-.form-style-2 input[type=submit]:hover,
-.form-style-2 input[type=button]:hover{
-	background: #EA7B00;
-	color: #fff;
-}
-
-</style>
 <body class="w3-theme-l5">
 <div class="w3-top" >
   <div class="w3-row w3-white">
@@ -127,7 +51,7 @@
   <button class="w3-button w3-hide-medium">
   <i class="fa fa-bell" style="font-size:22px;margin-top:2px;"></i>
   <c:if test="${reqCount>0}">
-  <span class="w3-badge w3-right w3-small w3-green">${reqCount }</span>
+  <span class="w3-badge w3-right w3-small w3-red">${reqCount }</span>
   </c:if>
   </button>
    <c:if test="${reqCount>0}">    
@@ -161,27 +85,71 @@
  	</div>
  	
   </div>
+
+
+<div class="w3-sidebar w3-bar-block w3-collapse" 
+style="z-index:3;width:260px;" id="mySidebar">
+  <!-- 프로필 -->
+     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px; margin-top:10px">
+    <button onclick="document.getElementById('id01').style.display='block'" 
+ 			 class="w3-button w3-green w3-large" style="width:120px">채팅하기</button>
+      </div>
+      <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">
+  
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-large w3-transparent w3-display-topright" title="Close Modal" 
+        >×</span>
+      </div>
+		<div class="w3-pale-blue" id="messageWindow" style="margin-top:18.8px;width:400px; height:400px; border: 1px solid grey;
+	overflow: auto;"></div><br/>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+		 <input id="inputMessage" type="text" style="width:270px;height:50px;margin-left:20px;margin-top:5px"/>
+		<input type="submit" value="전송" onclick="send()" class="w3-button w3-theme" style="height:50px;margin-bottom:3px"/>
+      </div>
+
+    </div>
+  </div>
+</div>
 </div>
 
-		  <div class="w3-sidebar w3-bar-block w3-white " style="z-index:3;width:260px;" >
-		  <div class="w3-padding-50 w3-large w3-text-grey" style="font-weight:bold; margin-top:20px ">
-		  <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px">
-		    <a href="#" class="w3-bar-item w3-button">아이디 찾기</a>
-		    <a href="#" class="w3-bar-item w3-button">비밀번호 찾기</a>
-		    <a href="#" class="w3-button w3-block w3-white w3-left-align">
-		      회원정보 <i class="fa fa-caret-down"></i>
-		    </a>
-		    <div class="w3-bar-block w3-padding-large w3-medium">
-		      <a href="#" class="w3-bar-item w3-button">학교정보 변경</a>
-		      <a href="#" class="w3-bar-item w3-button">비밀번호 변경</a>
-		      <a href="#" class="w3-bar-item w3-button">탈퇴하기</a>
-		    </div>
-		   
-		  	</div>
-			</div>
-		 	</div>
+<script type="text/javascript">
+	var textarea = document.getElementById("messageWindow");
+	var webSocket= new WebSocket('ws://211.238.142.29:8080<%=request.getContextPath()%>/weball');
+	var inputMessage = document.getElementById('inputMessage');
+	
+	webSocket.onerror=function(event){onError(event)};
+	webSocket.onopen=function(event){onOpen(event)};
+	webSocket.onmessage=function(event){onMessage(event)};
+	
+	function onMessage(event){
+		 textarea.innerHTML += "<div  id='you'  class='w3-white "
+			    +"w3-border w3-round-large w3-padding-small' "
+			    +"style='width:180px;'>"
+			    +event.data + "</div><br>";
+		 textarea.scrollTop=textarea.scrollHeight;
+	}
+	
+	function onOpen(event){
+		textarea.innerHTML += "'${name}'님이 입장하였습니다.<br>";
+		webSocket.send("${name}:입장 하였습니다");
+	}
+	
+	function onError(event){alert(event.data);}
+	function send(){
+		  textarea.innerHTML += "<div  class='w3-yellow w3-border "
+		        +"w3-round-large w3-padding-small' "
+		        +" id='me' style='width:180px;'>${name}: " 
+		        + inputMessage.value 
+		        + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>";
+		  textarea.scrollTop=textarea.scrollHeight;
+	      webSocket.send("${name}:"+inputMessage.value);
+	      inputMessage.value="";
+	}
+	
 
-
+</script>
 
 
 

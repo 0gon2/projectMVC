@@ -12,10 +12,9 @@
 
 <!-- 사이드 바 -->
 <div class="w3-sidebar w3-bar-block w3-collapse" 
-style="z-index:3;width:260px" id="mySidebar">
-	<p></p>
+style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
   <!-- 프로필 -->
-     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px">
+     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px;margin-top:10px">
         <div class="w3-container">
          <h4 class="w3-center">Other Profile</h4>
          <p class="w3-center"><img src="<%=request.getContextPath()%>/images/defaultprofile.jpg" 
@@ -26,7 +25,16 @@ style="z-index:3;width:260px" id="mySidebar">
          <a href="schoolBoard">${aditemt}</a>, 
          <a href="schoolBoard?index=2">${aditmid}</a>,
          <a href="schoolBoard?index=3">${adithigh}</a></p>
-         <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> June 15, 1994 </p>
+         <p ><i class="fa fa-male fa-fw "></i>&nbsp;&nbsp;&nbsp;
+  			<select onchange="window.location='mainPage?pageId='+this.value">
+  			  <option  value="">&nbsp;[친구목록]&nbsp;</option>
+  			  <c:forEach items="${friendList }" var="friendList">
+			  <option value="${friendList.memberid}" >
+			  ${friendList.name}</option>
+			  </c:forEach>
+			</select>
+         </p>
+         
         </div>
       </div>
       <div>
@@ -49,7 +57,7 @@ style="z-index:3;width:260px" id="mySidebar">
 style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- Main content: shift it to the right by 270 pixels when the sidebar is visible -->
-<div class="w3-main w3-container" style="margin-left:270px;margin-top:117px;">
+<div class="w3-main w3-container" style="margin-left:270px;margin-top:85px;">
  <!-- The Grid -->
  <p>
   <div class="w3-row">

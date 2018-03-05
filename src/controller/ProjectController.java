@@ -132,7 +132,6 @@ public class ProjectController extends Action {
 			MemberVO mVO=dbPro.getUserInfo(id);
 			int reqCount = dbPro.reqeustCount(id);
 			List reqList=dbPro.reqList(id);
-			List friendList=dbPro.friendList(id);
 			
 			
 			String name=mVO.getName();
@@ -141,7 +140,7 @@ public class ProjectController extends Action {
 			String schhigh=mVO.getSch_high();
 			int birthday=mVO.getBirthday();
 			HttpSession session = req.getSession();
-			session.setAttribute("friendList", friendList);	
+		
 			session.setAttribute("reqCount", reqCount);	
 			session.setAttribute("reqList", reqList);	
 			session.setAttribute("name", name);	
@@ -168,7 +167,8 @@ public class ProjectController extends Action {
 			pageId=(String)session.getAttribute("myId");
 		}
 		String myId= (String)session.getAttribute("myId");
-		
+		List friendList=null;
+		MemberDAO dbPro = MemberDAO.getInstance();
 		if(pageId.equals(myId)) {
 			String schemt=(String)session.getAttribute("schemt");
 			String schmid=(String)session.getAttribute("schmid");
@@ -176,17 +176,20 @@ public class ProjectController extends Action {
 			String aditemt=schemt.substring(0,schemt.length()-3);
 			String aditmid=schmid.substring(0,schmid.length()-2);
 			String adithigh=schhigh.substring(0,schhigh.length()-3);
+			friendList=dbPro.friendList(myId);
+			request.setAttribute("friendList", friendList);	
 			request.setAttribute("aditemt", aditemt);
 			request.setAttribute("aditmid", aditmid);
 			request.setAttribute("adithigh", adithigh);
 			return "/main/myPage.jsp"; 
 		}
 		else {
-			MemberDAO dbPro = MemberDAO.getInstance();
 			MemberVO otherInfo=dbPro.getUserInfo(pageId);
 			String schemt=otherInfo.getSch_emt();
 			String schmid=otherInfo.getSch_mid();
 			String schhigh=otherInfo.getSch_high();
+			friendList=dbPro.friendList(pageId);
+			request.setAttribute("friendList", friendList);	
 			String name=otherInfo.getName();
 			String aditemt=schemt.substring(0,schemt.length()-3);
 			String aditmid=schmid.substring(0,schmid.length()-2);
@@ -344,6 +347,16 @@ public class ProjectController extends Action {
 		
 			 return "/board/schoolBoard.jsp"; 
 	} 
+	
+	//라운지
+	public String lounge(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable { 
+		HttpSession session=request.getSession();
+		String name= (String) session.getAttribute("name");
+		request.setAttribute("name", name);
+			 return  "/lounge/lounge.jsp"; 
+			}
+	
 	
 
 }
