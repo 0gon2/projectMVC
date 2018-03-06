@@ -27,7 +27,7 @@ public class GetMessageListService {
 			conn = MessageDAO.getConnection();
 			MessageDAO messageDao = MessageDAO.getInstance();
 
-			int messageTotalCount = messageDao.selectCount();
+			int messageTotalCount = messageDao.selectCount(memberid);
 
 			List<ListVO> messageList = null;
 			int firstRow = 0;

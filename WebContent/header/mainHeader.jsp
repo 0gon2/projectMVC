@@ -46,7 +46,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
    
    <!-- 알림창 -->
     <div class="w3-dropdown-hover w3-hide-small">
-  <button class="w3-button w3-hide-medium">
+  <button class="w3-button w3-hide-medium " style="padding-bottom:13px" >
   <i class="fa fa-bell" style="font-size:22px;margin-top:2px;"></i>
   <c:if test="${reqCount>0}">
   <span class="w3-badge w3-right w3-small w3-red">${reqCount }</span>

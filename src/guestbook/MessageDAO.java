@@ -114,16 +114,22 @@ public class MessageDAO {
 		return message;
 	}
 
-	public int selectCount() throws SQLException {
-		Statement stmt = null;
+	public int selectCount(String receiverid) throws SQLException {
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		Connection conn=null;
+		String sql="";
+		int number=0;
 		try {
 			conn=getConnection();
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery("select nvl(count(*),0) from guestbook");
-			rs.next();
-			return rs.getInt(1);
+			sql = "select nvl(count(*),0) from guestbook where otherid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, receiverid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				number = rs.getInt(1);
+			}
+			return number;
 		} finally {
 			if (rs != null)
 				try {
@@ -135,9 +141,9 @@ public class MessageDAO {
 					conn.close();
 				} catch (SQLException ex) {
 			}
-			if (stmt != null)
+			if (pstmt != null)
 				try {
-					stmt.close();
+					pstmt.close();
 				} catch (SQLException ex) {
 			}
 		}

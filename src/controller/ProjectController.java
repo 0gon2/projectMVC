@@ -269,12 +269,19 @@ public class ProjectController extends Action {
 	public String writeMessagePro(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable {
 		MessageVO message = new MessageVO();
+		String receiverid = request.getParameter("otherid");
 		message.setContent(request.getParameter("content"));
 		message.setWriterid(request.getParameter("writerid"));
-		message.setOtherid(request.getParameter("otherid"));
+		message.setOtherid(receiverid);
 		WriteMessageService writeService = WriteMessageService.getInstance();
 		writeService.write(message);
-		response.sendRedirect(request.getContextPath()+"/gon/mainPage");
+		HttpSession session = request.getSession();
+		String myId=(String) session.getAttribute("myId");
+		if(receiverid.equals(myId)) {
+			response.sendRedirect(request.getContextPath()+"/gon/mainPage");
+		}else {
+			response.sendRedirect(request.getContextPath()+"/gon/mainPage?pageId="+receiverid);
+		}
 			 return null; 
 	}
 	public String deleteMessagePro(HttpServletRequest request,

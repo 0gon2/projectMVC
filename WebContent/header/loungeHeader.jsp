@@ -48,7 +48,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
    
    <!-- 알림창 -->
     <div class="w3-dropdown-hover w3-hide-small">
-  <button class="w3-button w3-hide-medium">
+  <button class="w3-button w3-hide-medium" style="padding-bottom:13px">
   <i class="fa fa-bell" style="font-size:22px;margin-top:2px;"></i>
   <c:if test="${reqCount>0}">
   <span class="w3-badge w3-right w3-small w3-red">${reqCount }</span>
@@ -101,7 +101,7 @@ style="z-index:3;width:260px;" id="mySidebar">
         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-large w3-transparent w3-display-topright" title="Close Modal" 
         >×</span>
       </div>
-		<div class="w3-pale-blue" id="messageWindow" style="margin-top:18.8px;width:400px; height:400px; border: 1px solid grey;
+		<div class="w3-pale-blue" id="messageWindow" style="margin-left:5px;margin-top:18.8px;width:95%; height:400px; border: 1px solid grey;
 	overflow: auto;"></div><br/>
 
       <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">

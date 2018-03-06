@@ -88,7 +88,7 @@ style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 	      <form action="deleteMessagePro" method="post">
       		<input type="submit" class="w3-right w3-opacity w3-button" value="×">
              <input type="hidden" name="num" value="${message.num}">
-  	  	  </form>
+  	  	  </form> 
 			        <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
 			        <c:if test="${message.name==name }">
 			        <h4>${message.name }</h4><br>
@@ -178,6 +178,7 @@ function post(){
 	message.submit();
 	
 }
+
 </script>
 <script src="https://www.w3schools.com/lib/w3codecolor.js"></script>
 <script>
