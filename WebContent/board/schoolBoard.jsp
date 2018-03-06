@@ -53,7 +53,6 @@
 
 		<div class="w3-center">
 		<c:if test="${count>0 }">
-			
 			<c:if test="${startPage>bottomLine }">
 			<a href="schoolBoard?pageNum=${startPage - bottomLine}&index=${index }">[이전]</a>
 			</c:if>

@@ -11,6 +11,7 @@ import java.util.List;
 
 
 
+
 public class MemberDAO {
 	// 싱글턴 메소드(1)
 	private static MemberDAO instance = new MemberDAO();
@@ -534,8 +535,6 @@ public class MemberDAO {
 	}
 	
 	
-	
-	
 	//전체 회원 수 카운팅
 	public int getMemberCount() {
 		Connection con = null;
@@ -590,8 +589,6 @@ public class MemberDAO {
 		}
 		return article;
 	}
-	
-	
 	
 	
 }

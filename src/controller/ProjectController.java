@@ -11,6 +11,11 @@ import javax.servlet.http.HttpSession;
 
 import com.sist.msk.Action;
 
+import guestbook.MessageDAO;
+import guestbook.MessageVO;
+import guestbook.service.GetMessageListService;
+import guestbook.service.MessageListView;
+import guestbook.service.WriteMessageService;
 import member.MemberDAO;
 import member.MemberVO;
 import school.SchoolDAO;
@@ -162,10 +167,18 @@ public class ProjectController extends Action {
 			 HttpServletResponse response)  throws Throwable { 
 		HttpSession session = request.getSession();
 		String pageId= request.getParameter("pageId");
-		
 		if(pageId==null) {
 			pageId=(String)session.getAttribute("myId");
 		}
+		String pageNumberStr = request.getParameter("page");
+		int pageNumber = 1;
+		if (pageNumberStr != null) {
+			pageNumber = Integer.parseInt(pageNumberStr);
+		}
+
+		GetMessageListService messageListService = 
+				GetMessageListService.getInstance();
+		MessageListView viewData = null;
 		String myId= (String)session.getAttribute("myId");
 		List friendList=null;
 		MemberDAO dbPro = MemberDAO.getInstance();
@@ -177,10 +190,13 @@ public class ProjectController extends Action {
 			String aditmid=schmid.substring(0,schmid.length()-2);
 			String adithigh=schhigh.substring(0,schhigh.length()-3);
 			friendList=dbPro.friendList(myId);
+			viewData=messageListService.getMessageList(pageNumber,myId);
+			request.setAttribute("viewData", viewData);
 			request.setAttribute("friendList", friendList);	
 			request.setAttribute("aditemt", aditemt);
 			request.setAttribute("aditmid", aditmid);
 			request.setAttribute("adithigh", adithigh);
+			request.setAttribute("pageId", pageId);
 			return "/main/myPage.jsp"; 
 		}
 		else {
@@ -188,12 +204,14 @@ public class ProjectController extends Action {
 			String schemt=otherInfo.getSch_emt();
 			String schmid=otherInfo.getSch_mid();
 			String schhigh=otherInfo.getSch_high();
-			friendList=dbPro.friendList(pageId);
-			request.setAttribute("friendList", friendList);	
 			String name=otherInfo.getName();
 			String aditemt=schemt.substring(0,schemt.length()-3);
 			String aditmid=schmid.substring(0,schmid.length()-2);
 			String adithigh=schhigh.substring(0,schhigh.length()-3);
+			friendList=dbPro.friendList(pageId);
+			viewData=messageListService.getMessageList(pageNumber,pageId);
+			request.setAttribute("viewData", viewData);
+			request.setAttribute("friendList", friendList);	
 			String addReq=request.getParameter("addReq");
 			String acceptReq= request.getParameter("acceptReq");
 			String statement= null;
@@ -247,6 +265,28 @@ public class ProjectController extends Action {
 		}
 		
 	} 
+	
+	public String writeMessagePro(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		MessageVO message = new MessageVO();
+		message.setContent(request.getParameter("content"));
+		message.setWriterid(request.getParameter("writerid"));
+		message.setOtherid(request.getParameter("otherid"));
+		WriteMessageService writeService = WriteMessageService.getInstance();
+		writeService.write(message);
+		response.sendRedirect(request.getContextPath()+"/gon/mainPage");
+			 return null; 
+	}
+	public String deleteMessagePro(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		String num=request.getParameter("num");
+		MessageDAO dbPro=MessageDAO.getInstance();
+		dbPro.deleteMessage(Integer.parseInt(num));
+		response.sendRedirect(request.getContextPath()+"/gon/mainPage");
+			 return null; 
+	}
+	
+	
 	public String updateLoginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
 			 return "/update/updateLoginForm.jsp"; 

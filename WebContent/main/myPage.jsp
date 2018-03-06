@@ -50,7 +50,7 @@ style="z-index:3;width:260px; margin-top:13px" id="mySidebar">
 style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- Main content: shift it to the right by 270 pixels when the sidebar is visible -->
-<div class="w3-main w3-container" style="margin-left:270px;margin-top:85px;">
+<div class="w3-main w3-container" style="margin-left:250px;margin-top:85px;">
  <!-- The Grid -->
  <p>
   <div class="w3-row">
@@ -59,38 +59,62 @@ style="cursor:pointer" title="close side menu" id="myOverlay"></div>
     <!-- 게시글 입력란 -->
       <div class="w3-row-padding">
         <div class="w3-col m12">
-          <div class="w3-card w3-round w3-white">
+          <div class="w3-card w3-round w3-white" style="margin-top:20px">
             <div class="w3-container w3-padding">
               <h6 class="w3-opacity">Social Media template by w3.css</h6>
-              <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
-              <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+              
+      <form name="postmessage" action="writeMessagePro" method="post">
+              <input type="text" class="w3-border w3-padding" 
+              placeholder="Status: Feeling Blue" style="width:100%;height:40px;margin-bottom:10px"
+              name="content">
+              <input type="hidden" name="writerid" value="${myId}">
+              <input type="hidden" name="otherid" value="${pageId}">
+    		  </form>
+              <button type="button" class="w3-button w3-theme" onclick="post()"><i class="fa fa-pencil"></i>  Post</button> 
             </div>
           </div>
         </div>
       </div>
+      <c:if test="${viewData.isEmpty()}">
+		 <div class="w3-container"><br>
+			         <div class="w3-blue w3-center w3-round" style="width:100%">첫 번째 메시지를 남겨보세요 ^^</div>
+	  </div>
+	  </c:if>
       
-      <div class="w3-container w3-card w3-light-grey w3-round w3-margin"><br>
-        <img src="/w3images/avatar2.png" alt="Avatar" 
-        class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">1 min</span>
-        <h4>John Doe</h4><br>
-        <hr class="w3-clear">
-        <p> 내용 </p>
-          <div class="w3-row-padding" style="margin:0 -16px">
-            <div class="w3-half">
-              <img src="/w3images/lights.jpg" style="width:100%" alt="Northern Lights" 
-              class="w3-margin-bottom">
-            </div>
-            <div class="w3-half">
-              <img src="/w3images/nature.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
-          </div>
-        </div>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom">
-        <i class="fa fa-thumbs-up"></i>  Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom">
-        <i class="fa fa-comment"></i>  Comment</button> 
-      </div>
-    <!-- End Middle Column -->
+     <c:if test="${!viewData.isEmpty()}">
+		<c:forEach var="message" items="${viewData.messageList}">
+			
+			     <div class="w3-container w3-card w3-light-grey w3-round w3-margin">
+	      <form action="deleteMessagePro" method="post">
+      		<input type="submit" class="w3-right w3-opacity w3-button" value="×">
+             <input type="hidden" name="num" value="${message.num}">
+  	  	  </form>
+			        <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+			        <c:if test="${message.name==name }">
+			        <h4>${message.name }</h4><br>
+			        </c:if>
+			        <c:if test="${message.name!=name }">
+			        <h4 style="color:maroon;">${message.name }</h4><br>
+			        </c:if>
+			        <hr class="w3-clear">
+			        <p> ${message.content}</p>
+			          <div class="w3-row-padding" style="margin:0 -16px">
+			        </div>
+			        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom">
+			        <i class="fa fa-thumbs-up"></i>  Like</button> 
+			        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom">
+			        <i class="fa fa-comment"></i>  Comment</button> 
+			      </div>
+			      
+		</c:forEach>
+		<div class="w3-center">
+     		<c:forEach var="pageNum" begin="1" end="${viewData.pageTotalCount}">
+				<a href="mainPage?page=${pageNum}">[${pageNum}]</a>
+			</c:forEach>
+			</div> 
+		</c:if>
+      
+    
     </div>
     
     <!-- Right Column -->
@@ -148,6 +172,11 @@ function w3_show_nav(name) {
     document.getElementById("menuRef").style.display = "none";
     document.getElementById(name).style.display = "block";
     w3-open();
+}
+function post(){
+	var message=document.postmessage;
+	message.submit();
+	
 }
 </script>
 <script src="https://www.w3schools.com/lib/w3codecolor.js"></script>
