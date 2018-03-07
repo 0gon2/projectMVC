@@ -206,7 +206,8 @@ button:hover {
         <div class="w3-section">
           <label><b>학교검색</b></label>
           <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="msname" required>
-          <input class="w3-button w3-block w3-blue w3-section w3-padding" type="button" onclick="helloToServer('msname')" value="찾기">
+          <input class="w3-button w3-block w3-blue w3-section w3-padding" type="button" 
+          onclick="helloToServer('msname')" value="찾기">
         </div>
       </form>
       <div class="w3-container" id="bbb"></div>

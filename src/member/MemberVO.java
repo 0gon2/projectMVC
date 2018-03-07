@@ -13,9 +13,41 @@ public class MemberVO {
 	private Date joindate;
 	private int point;
 	
+	private String profile;
+	private int prosize;
+	private String background;
+	private int backsize;
+	
+	
+	
 	private String emtid;
+	public int getProsize() {
+		return prosize;
+	}
+	public void setProsize(int prosize) {
+		this.prosize = prosize;
+	}
+	public int getBacksize() {
+		return backsize;
+	}
+	public void setBacksize(int backsize) {
+		this.backsize = backsize;
+	}
 	private String midid;
 	private String highid;
+	
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	public String getBackground() {
+		return background;
+	}
+	public void setBackground(String background) {
+		this.background = background;
+	}
 	
 	public String getEmtid() {
 		return emtid;

@@ -107,6 +107,8 @@ public class MessageDAO {
 
 	private ListVO makeMessageFromResultSet(ResultSet rs) throws SQLException {
 		ListVO message=new ListVO();
+		message.setBackground(rs.getString("profile"));
+		message.setProfile(rs.getString("profile"));
 		message.setNum(rs.getInt("num"));
 		message.setContent(rs.getString("content"));
 		message.setWriterid(rs.getString("writerid"));
@@ -158,7 +160,7 @@ public class MessageDAO {
 		try {
 			conn=getConnection();
 			sql = " select * from (select rownum rnum ,a.* "
-					+ "from(select num, writerid, name,content "
+					+ "from(select num, writerid, name,content,profile, background "
 					+ "from member m, guestbook g "
 					+ "where m.memberid=g.writerid "
 					+ "and otherid=? order by num desc)a ) "

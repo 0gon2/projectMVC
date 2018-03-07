@@ -17,9 +17,16 @@ style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
      <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px;margin-top:10px">
         <div class="w3-container">
          <h4 class="w3-center">Other Profile</h4>
-         <p class="w3-center"><img src="<%=request.getContextPath()%>/images/defaultprofile.jpg" 
-         class="w3-circle" style="height:106px;width:106px" ></p>
-         <hr>
+        <c:if test="${profile==null }">
+         <p class="w3-center">
+         <img src="/projectMVC/images/defaultprofile.png" 
+         class="w3-circle" style="height:130px;width:130px" ></p>
+         </c:if>
+         <c:if test="${profile!=null }">
+         <p class="w3-center">
+         <img src="/projectMVC/fileSave/${profile}" 
+         class="w3-circle" style="height:130px;width:130px" ></p>
+         </c:if>
          <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> ${name }</p>
          <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
          <a href="schoolBoard">${aditemt}</a>, 
@@ -96,12 +103,19 @@ style="cursor:pointer" title="close side menu" id="myOverlay"></div>
       		<input type="submit" class="w3-right w3-opacity w3-button" value="×">
              <input type="hidden" name="num" value="${message.num}">
   	  	  </form>
-			        <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+			        <c:if test="${message.profile==null }">
+         <img src="/projectMVC/images/defaultprofile.png" 
+         class="w3-circle" style="height:55px;width:55px" >
+         </c:if>
+         <c:if test="${message.profile!=null }">
+         <img src="/projectMVC/fileSave/${message.profile}" 
+         class="w3-circle" style="height:55px;width:55px" >
+         </c:if>
 			        <c:if test="${message.name==name }">
-			        <h4>${message.name }</h4><br>
+			        <font size="5px">&nbsp; ${message.name }</font><br>
 			        </c:if>
 			        <c:if test="${message.name!=name }">
-			        <h4 style="color:maroon;">${message.name }</h4><br>
+			        <font size="5px" color="maroon">&nbsp; ${message.name }</font><br>
 			        </c:if>
 			        <hr class="w3-clear">
 			        <p> ${message.content}</p>

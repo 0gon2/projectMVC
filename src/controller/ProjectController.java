@@ -1,14 +1,19 @@
 package controller;
 
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.sist.msk.Action;
 
 import guestbook.MessageDAO;
@@ -61,7 +66,9 @@ public class ProjectController extends Action {
 		 String msname=request.getParameter("msname");
 		 String hsname=request.getParameter("hsname");
 		 String index= request.getParameter("index");
-		 
+		 if(index==null) {
+			 index="1";
+		 }
 		 String emtid=request.getParameter("emtid");
 		 String midid=request.getParameter("midid");
 		 String highid=request.getParameter("highid");
@@ -91,7 +98,44 @@ public class ProjectController extends Action {
 		 
 			 return "/start/searchList.jsp"; 
 			} 
-	
+	public String updateList(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		 String esname=request.getParameter("esname");
+		 String msname=request.getParameter("msname");
+		 String hsname=request.getParameter("hsname");
+		 String index= request.getParameter("index");
+		 if(index==null) {
+			 index="1";
+		 }
+		 String emtid=request.getParameter("emtid");
+		 String midid=request.getParameter("midid");
+		 String highid=request.getParameter("highid");
+		 
+		 
+		 SchoolDAO schoolDB= SchoolDAO.getInstance();
+		 List List=null;
+		 
+		 if(index.equals("1")){
+			 List=schoolDB.getSchools(esname,"초등학교");
+		 }
+		 if(index.equals("2")){
+			 List=schoolDB.getSchools(msname,"중학교");
+		 }
+		 if(index.equals("3")){
+			 List=schoolDB.getSchools(hsname,"고등학교");
+		 }
+		 
+		 request.setAttribute("List",List);
+		 request.setAttribute("esname",esname);
+		 request.setAttribute("msname",msname);
+		 request.setAttribute("hsname",hsname);
+		 request.setAttribute("index",index);
+		 request.setAttribute("emtid",emtid);
+		 request.setAttribute("midid",midid);
+		 request.setAttribute("highid",highid);
+		 
+			 return "/start/updateList.jsp"; 
+			} 
 	public String signupPro(HttpServletRequest request,
  		 HttpServletResponse response)  throws Throwable { 
 			
@@ -111,6 +155,24 @@ public class ProjectController extends Action {
 			response.sendRedirect(request.getContextPath()+"/gon/loginForm");
 			 return null; 
 			} 
+	public String ListUpdatePro(HttpServletRequest request,
+	 		 HttpServletResponse response)  throws Throwable { 
+				HttpSession session =request.getSession();
+				String myId=(String) session.getAttribute("myId");
+				MemberVO member = new MemberVO();
+				member.setSch_emt(request.getParameter("sch_emt"));
+				member.setMemberid(myId);
+				member.setSch_mid(request.getParameter("sch_mid"));
+				member.setSch_high(request.getParameter("sch_high"));
+				MemberDAO dbPro = MemberDAO.getInstance();
+				dbPro.listUpdate(member);
+				session.setAttribute("schemt", member.getSch_emt());
+				session.setAttribute("schmid", member.getSch_mid());
+				session.setAttribute("schhigh", member.getSch_high());
+				response.sendRedirect(request.getContextPath()+"/gon/updateForm");
+				 return null; 
+				}
+	
 	
 	public String loginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
@@ -182,6 +244,11 @@ public class ProjectController extends Action {
 		String myId= (String)session.getAttribute("myId");
 		List friendList=null;
 		MemberDAO dbPro = MemberDAO.getInstance();
+		String myProfile=null;
+		String myBackground=null;
+		String otherProfile=null;
+		String otherBackground=null;
+	
 		if(pageId.equals(myId)) {
 			String schemt=(String)session.getAttribute("schemt");
 			String schmid=(String)session.getAttribute("schmid");
@@ -189,8 +256,14 @@ public class ProjectController extends Action {
 			String aditemt=schemt.substring(0,schemt.length()-3);
 			String aditmid=schmid.substring(0,schmid.length()-2);
 			String adithigh=schhigh.substring(0,schhigh.length()-3);
-			friendList=dbPro.friendList(myId);
 			viewData=messageListService.getMessageList(pageNumber,myId);
+			friendList=dbPro.friendList(myId);
+			myProfile=dbPro.getProfile(myId);
+			myBackground=dbPro.getBackground(myId);
+			request.setAttribute("myProfile", myProfile);
+			request.setAttribute("myBackground", myBackground);
+			
+			
 			request.setAttribute("viewData", viewData);
 			request.setAttribute("friendList", friendList);	
 			request.setAttribute("aditemt", aditemt);
@@ -210,6 +283,10 @@ public class ProjectController extends Action {
 			String adithigh=schhigh.substring(0,schhigh.length()-3);
 			friendList=dbPro.friendList(pageId);
 			viewData=messageListService.getMessageList(pageNumber,pageId);
+			otherProfile=dbPro.getProfile(pageId);
+			otherBackground=dbPro.getBackground(pageId);
+			request.setAttribute("otherProfile", otherProfile);
+			request.setAttribute("otherBackground", otherBackground);
 			request.setAttribute("viewData", viewData);
 			request.setAttribute("friendList", friendList);	
 			String addReq=request.getParameter("addReq");
@@ -296,6 +373,25 @@ public class ProjectController extends Action {
 	
 	public String updateLoginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
+		HttpSession session=request.getSession();
+		MemberDAO dbPro = MemberDAO.getInstance();
+		String myId= (String)session.getAttribute("myId");
+		String schemt=(String)session.getAttribute("schemt");
+		String schmid=(String)session.getAttribute("schmid");
+		String schhigh=(String)session.getAttribute("schhigh");
+		String aditemt=schemt.substring(0,schemt.length()-3);
+		String aditmid=schmid.substring(0,schmid.length()-2);
+		String adithigh=schhigh.substring(0,schhigh.length()-3);
+		List friendList=dbPro.friendList(myId);
+		request.setAttribute("friendList", friendList);	
+		request.setAttribute("aditemt", aditemt);
+		request.setAttribute("aditmid", aditmid);
+		request.setAttribute("adithigh", adithigh);
+		String profile=dbPro.getProfile(myId);
+		String background=dbPro.getBackground(myId);
+		request.setAttribute("profile", profile);
+		request.setAttribute("background", background);
+		
 			 return "/update/updateLoginForm.jsp"; 
 	} 
 	
@@ -318,11 +414,116 @@ public class ProjectController extends Action {
 	
 	
 	public String updateForm(HttpServletRequest request,
-			 HttpServletResponse response)  throws Throwable { 
+			 HttpServletResponse response)  throws Throwable {
+		HttpSession session=request.getSession();
+		MemberDAO dbPro = MemberDAO.getInstance();
+		String myId= (String)session.getAttribute("myId");
+		String schemt=(String)session.getAttribute("schemt");
+		String schmid=(String)session.getAttribute("schmid");
+		String schhigh=(String)session.getAttribute("schhigh");
+		String aditemt=schemt.substring(0,schemt.length()-3);
+		String aditmid=schmid.substring(0,schmid.length()-2);
+		String adithigh=schhigh.substring(0,schhigh.length()-3);
+		List friendList=dbPro.friendList(myId);
+		request.setAttribute("friendList", friendList);	
+		request.setAttribute("aditemt", aditemt);
+		request.setAttribute("aditmid", aditmid);
+		request.setAttribute("adithigh", adithigh);
+		String profile=dbPro.getProfile(myId);
+		String background=dbPro.getBackground(myId);
+		request.setAttribute("profile", profile);
+		request.setAttribute("background", background);
+		
+		
+		String index=null;
+		if(index==null) {
+			index="1";
+		}
+		String esname=request.getParameter("esname");
+		if(esname==null){
+			esname="";
+		}
+		String msname=request.getParameter("msname");
+		if(msname==null){
+			msname="";
+		}
+		String hsname=request.getParameter("hsname");
+		if(hsname==null){
+			hsname="";
+		}
+		
+		String emtid=request.getParameter("emtid");
+		String midid=request.getParameter("midid");
+		String highid=request.getParameter("highid");
+		
+		request.setAttribute("index",index);
+		request.setAttribute("esname",esname);
+		request.setAttribute("msname",msname);
+		request.setAttribute("hsname",hsname);
+		request.setAttribute("emtid",emtid);
+		request.setAttribute("midid",midid);
+		request.setAttribute("highid",highid);
+		
+		
 			 return "/update/updateForm.jsp"; 
 	} 
 	
-	
+	public String updatePro(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable { 
+		HttpSession session = request.getSession();
+		String myId= (String)session.getAttribute("myId");
+		
+		
+		String realFolder=""; //웹 어플리케이션상의 절대 경로
+		String encType = "utf-8"; //인코딩 타입
+		int maxSize= 10*1024*1024; // 최대 업로드될 파일크기 10mb
+		ServletContext context=request.getServletContext();
+		realFolder=context.getRealPath("fileSave");
+		MultipartRequest multi=null;
+		multi=new MultipartRequest(request, realFolder,maxSize,encType,new DefaultFileRenamePolicy());
+		Enumeration files=multi.getFileNames();
+		
+		
+		 String[] filename=new String[2];
+         File[] file = new File[2];
+         int index=0;
+        
+		while(files.hasMoreElements()) {
+			String name = (String) files.nextElement();
+			System.out.println(index+";"+name);
+            
+			filename[index]=multi.getFilesystemName(name);
+            System.out.println(multi.getContentType(name));
+            file[index] = multi.getFile(name);
+            index++;
+           
+		}
+		MemberVO member = new MemberVO();
+		MemberDAO dbPro= MemberDAO.getInstance();
+		if(file[0]!=null){
+			member.setBackground(filename[0]);
+			member.setBacksize((int)file[0].length());
+			dbPro.profileUpload(member, myId,1);
+
+		}else {
+			member.setBackground("");
+			member.setBacksize(0);
+		}
+		if(file[1]!=null){
+			member.setProfile(filename[1]);
+	    	member.setProsize((int)file[1].length());
+	    	dbPro.profileUpload(member, myId,0);
+		}else {
+			member.setProfile("");
+			member.setProsize(0);
+		}
+		
+		 //filename =0이 background 
+        //=1 은 profile
+		
+		response.sendRedirect(request.getContextPath()+"/gon/updateForm");
+		return null; 
+	} 
 	//보드 게시판
 	public String schoolBoard(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 

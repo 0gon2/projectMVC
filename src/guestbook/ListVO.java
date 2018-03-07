@@ -5,6 +5,20 @@ public class ListVO {
 	private String writerid;
 	private String name;
 	private String content;
+	private String profile;
+	private String background;
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	public String getBackground() {
+		return background;
+	}
+	public void setBackground(String background) {
+		this.background = background;
+	}
 	public int getNum() {
 		return num;
 	}

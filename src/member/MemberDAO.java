@@ -222,7 +222,57 @@ public class MemberDAO {
 		}
 	}
 	
+	public void listUpdate(MemberVO member) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = getConnection();
+			String sql = "update member set sch_emt=?, sch_mid=?,sch_high=? where memberid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member.getSch_emt());
+			pstmt.setString(2, member.getSch_mid());
+			pstmt.setString(3, member.getSch_high());
+			pstmt.setString(4, member.getMemberid());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			close(conn, pstmt, null);
+		}
+	}
 	
+	public void profileUpload(MemberVO member,String memberid, int chk) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql="";
+		try {
+			conn = getConnection();
+			if(chk==0) {
+				sql = "update member set profile=?, prosize=? "
+						+ "where memberid=? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, member.getProfile());
+				pstmt.setInt(2, member.getProsize());
+				pstmt.setString(3, memberid);
+				pstmt.executeUpdate();
+			}
+			else{
+				sql = "update member set background=?, backsize=? "
+						+ "where memberid=? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, member.getBackground());
+				pstmt.setInt(2, member.getBacksize());
+				pstmt.setString(3, memberid);
+				pstmt.executeUpdate();
+			}
+
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			close(conn, pstmt, null);
+		}
+	}
 	
 	public String identifyRequest(String myId, String otherid) {
 		Connection con = null;
@@ -250,8 +300,51 @@ public class MemberDAO {
 		return statement;
 	}
 	
-	
-	
+	public String getProfile(String memberid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		String profile = null;
+		try {
+			con=getConnection();
+			sql = "select profile from member where memberid=? ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				profile = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(con, pstmt, rs);
+		}
+		return profile;
+	}
+	public String getBackground(String memberid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		String background = null;
+		try {
+			con=getConnection();
+			sql = "select background from member where memberid=? ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, memberid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				background = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			close(con, pstmt, rs);
+		}
+		return background;
+	}
 	
 	
 	

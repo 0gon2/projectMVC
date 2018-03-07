@@ -86,10 +86,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
   <div class="w3-sidebar w3-bar-block w3-white " style="z-index:3;width:260px;" >
   <div class="w3-padding-50 w3-large w3-text-grey" style="margin-top:20px ">
   <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px">
-    <h4>학생 명단</h4>
-  <a class="w3-bar-item w3-button" href="schoolBoard">${schemt }</a>
-  <a class="w3-bar-item w3-button" href="schoolBoard?index=2">${schmid }</a>
-  <a class="w3-bar-item w3-button" href="schoolBoard?index=3">${schhigh }</a>
+    <h4 class="w3-center">&lt;동창 찾기&gt;</h4><ul><li>
+  <a class="w3-bar-item w3-button" href="schoolBoard">${schemt }</a></li>
+  <li><a class="w3-bar-item w3-button" href="schoolBoard?index=2">${schmid }</a></li>
+  <li><a class="w3-bar-item w3-button" href="schoolBoard?index=3">${schhigh }</a></li>
+  </ul>
   </div>
   </div>
   </div>

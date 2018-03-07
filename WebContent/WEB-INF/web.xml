@@ -19,7 +19,7 @@
   	
   	<jsp-property-group>
   	<url-pattern>/update/*</url-pattern>
-  	<include-prelude>/sidebar/updateSidebar.jsp</include-prelude>
+  	<include-prelude>/header/updateHeader.jsp</include-prelude>
   	</jsp-property-group>
   	
   	<jsp-property-group>

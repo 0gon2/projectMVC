@@ -101,7 +101,7 @@ style="z-index:3;width:260px;" id="mySidebar">
         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-large w3-transparent w3-display-topright" title="Close Modal" 
         >×</span>
       </div>
-		<div class="w3-pale-blue" id="messageWindow" style="margin-left:5px;margin-top:18.8px;width:95%; height:400px; border: 1px solid grey;
+		<div class="w3-pale-blue" id="messageWindow" style="margin-top:18.8px;width:100%; height:400px;
 	overflow: auto;"></div><br/>
 
       <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">

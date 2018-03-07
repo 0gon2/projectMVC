@@ -20,7 +20,7 @@
 			</table>
 		</c:if>
 		<c:if test="${count!=0 }">
-		<p class="w3-large" style="font-style:italic;">${hakmungu} 학생명단</p>
+		<p class="w3-large" style="font-style:italic;">${hakmungu} 학생들~</p>
 		<table width="100%" bordercolor="w3-blue" style="border-collapse:collapse;">
 			<tr height="30" class="w3-blue" align="center" >
 				<td align="center" width="6%">번호</td>
