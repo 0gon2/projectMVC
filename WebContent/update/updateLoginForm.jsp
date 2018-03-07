@@ -1,14 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
   <div class="w3-main w3-container" style="margin-left:260px;margin-top:140px;">
-	<div class="w3-panel w3-padding-large w3-card-4" style="margin-left:20px;width:40%">
+	<div class="w3-panel w3-padding-large w3-card-4" style="margin-left:20px;width:50%">
  
   	<h4 class="w3-opacity"><i class="fa fa-male"></i>&nbsp;회원정보</h4>
  	 <div class="w3-col m7" style="width:400px" >
@@ -25,5 +18,3 @@
  	  </div>
 	</div>
 </div>
-</body>
-</html>

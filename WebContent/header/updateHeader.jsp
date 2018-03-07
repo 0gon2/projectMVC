@@ -3,8 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,10 +19,9 @@
 html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 
 </style>
+
 <style type="text/css">
 .form-style-2{
-	max-width: 500px;
-	padding: 20px 12px 10px 20px;
 
 }
 .form-style-2-heading{
@@ -160,11 +157,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 	</c:if>
     </div>
  	</div>
- 	
+ 	</div>
   </div>
-		  <div class="w3-sidebar w3-bar-block w3-white " style="z-index:3;width:260px;" >
-   <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px; margin-top:10px">
-        <div class="w3-container">
+  
+  
+	<div class="w3-sidebar w3-bar-block w3-collapse" 
+style="z-index:3;width:260px; margin-top:13px" id="mySidebar">
+  <!-- 프로필 -->
+     <div class="w3-card w3-round w3-white" style="width:240px; 
+     margin-left:10px; margin-top:5px">
+      <div class="w3-container">
          <h4 class="w3-center">Profile</h4>
          <c:if test="${profile==null }">
          <p class="w3-center">
@@ -209,7 +211,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 		  	</div>
 			</div>
 		 	</div>
-</div>
+
 
 
 
@@ -217,4 +219,3 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 
 
 </body>
-</html>

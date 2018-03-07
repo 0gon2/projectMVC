@@ -14,7 +14,7 @@
 <div class="w3-sidebar w3-bar-block w3-collapse" 
 style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
   <!-- 프로필 -->
-     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px;margin-top:10px">
+     <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px;margin-top:5px">
         <div class="w3-container">
          <h4 class="w3-center">Other Profile</h4>
         <c:if test="${profile==null }">
@@ -64,7 +64,7 @@ style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
 style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- Main content: shift it to the right by 270 pixels when the sidebar is visible -->
-<div class="w3-main w3-container" style="margin-left:250px;margin-top:85px;">
+<div class="w3-main w3-container" style="margin-left:250px;margin-top:83px;">
  <!-- The Grid -->
  <p>
   <div class="w3-row">
