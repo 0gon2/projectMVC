@@ -51,9 +51,8 @@ style="z-index:3;width:260px; margin-top:13px" id="mySidebar">
      
         <div class="w3-card w3-round w3-light-white w3-center">
         <div class="w3-container">
-          <p>동창을 찾습니다</p>
-          <img src="/w3images/forest.jpg" alt="Forest" style="width:100%;">
-          <p><strong>Holiday</strong></p>
+          <p>HOT! 인기게시글</p>
+          <p><strong>[23]맨날 침흘리던 그 친구..</strong></p>
           <p>Friday 15:00</p>
           <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
         </div>

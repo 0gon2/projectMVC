@@ -16,7 +16,10 @@
 }
 
 body {
-  background-color: #ffffff;
+ /*  background-color: #ffffff;
+       background-image: url("/projectMVC/images/background.jpg");
+      background-size: cover;
+      background-attachment: fixed;  */
 }
 
 #regForm {

@@ -8,9 +8,9 @@
 
 
 body {
-  /*     background-image: url("/projectMVC/images/background.jpg");
+      /*  background-image: url("/projectMVC/images/background.jpg");
       background-size: cover;
-      background-attachment: fixed; */
+      background-attachment: fixed;  */
 
 font-family: Arial, Helvetica, sans-serif;}
 
