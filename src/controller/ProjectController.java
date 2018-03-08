@@ -310,13 +310,10 @@ public class ProjectController extends Action {
 			if(acceptReq.equals("1")) {
 				dbPro.acceptRequest(myId, pageId);
 			}
-			
 			String status=dbPro.getStatus(myId, pageId);
-			
 			if(status==null) {
 				statement="1";
 			}else if(status.equals("1")){
-				
 				String identify1 = dbPro.identifyRequest(myId, pageId);
 				String identify2 = dbPro.identifyRequest(pageId, myId);
 				if(identify1==null) {
