@@ -187,7 +187,13 @@ public class ProjectController extends Action {
 		response.sendRedirect(request.getContextPath()+"/gon/loginForm");
 			 return null; 
 			} 
-	
+	public String gogame(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		HttpSession session=request.getSession();
+		String name= (String) session.getAttribute("name");
+		request.setAttribute("name", name);
+			 return "/lounge/game.jsp"; 
+			} 
 	public String loginPro(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		String id=req.getParameter("memberid");
 		String pass=req.getParameter("password");
@@ -549,25 +555,30 @@ public class ProjectController extends Action {
 		String schemt=(String) session.getAttribute("schemt");
 		String schmid=(String)session.getAttribute("schmid");
 		String schhigh=(String)session.getAttribute("schhigh");
+		String myId= (String) session.getAttribute("myId");
+		MemberVO schoolId=dbPro.getSchoolId(myId);
+		String emtid=schoolId.getEmtid();
+		String midid=schoolId.getMidid();
+		String highid=schoolId.getHighid();
 		if(index.equals("1")){
 			hakmungu=schemt; 
-			count=dbPro.getSchoolmateCount("초등학교", schemt, schmid, schhigh);
+			count=dbPro.getSchoolmateCount("초등학교", emtid, midid, highid);
 			if(count>0){
-			articleList = dbPro.getSchoolmate(startRow, endRow, schemt, "초등학교");
+			articleList = dbPro.getSchoolmate(startRow, endRow, emtid, midid, highid, "초등학교");
 			}
 		}
 		if(index.equals("2")){
 			hakmungu=schmid;
-			count=dbPro.getSchoolmateCount("중학교", schemt, schmid, schhigh);
+			count=dbPro.getSchoolmateCount("중학교", emtid, midid, highid);
 			if(count>0){
-			articleList = dbPro.getSchoolmate(startRow, endRow, schmid, "중학교");
+			articleList = dbPro.getSchoolmate(startRow, endRow, emtid, midid, highid, "중학교");
 			}
 		}
 		if(index.equals("3")){
 			hakmungu=schhigh;
-			count=dbPro.getSchoolmateCount("고등학교", schemt, schmid, schhigh);
+			count=dbPro.getSchoolmateCount("고등학교", emtid, midid, highid);
 			if(count>0){
-			articleList = dbPro.getSchoolmate(startRow, endRow, schhigh, "고등학교");
+			articleList = dbPro.getSchoolmate(startRow, endRow, emtid, midid, highid, "고등학교");
 			}
 		}
 		number = count - (currentPage - 1) * pageSize;
@@ -595,7 +606,88 @@ public class ProjectController extends Action {
 		
 			 return "/board/schoolBoard.jsp"; 
 	} 
-	
+	public String searchFriend(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable { 
+		HttpSession session = request.getSession();
+		String friendName=request.getParameter("friendName");
+		if(friendName==null) {
+			friendName="";
+		}
+		String index= request.getParameter("index");
+		if (index==null){
+			index="1";
+		}
+		String pageNum = request.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		String hakmungu=null;
+		int pageSize = 5;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		int currentPage = Integer.parseInt(pageNum);
+		int startRow = (currentPage - 1) * pageSize + 1;
+		int endRow = currentPage * pageSize;
+		int count = 0;
+		int number = 0;
+		List articleList = null;
+		MemberDAO dbPro = MemberDAO.getInstance();
+		//학교 id를 가지고 오는 메소드가 필요함 -> memberVo로 가지고 와야함.
+		String myId= (String) session.getAttribute("myId");
+		String schemt=(String) session.getAttribute("schemt");
+		String schmid=(String)session.getAttribute("schmid");
+		String schhigh=(String)session.getAttribute("schhigh");
+		
+		MemberVO schoolId=dbPro.getSchoolId(myId);
+		String emtid=schoolId.getEmtid();
+		String midid=schoolId.getMidid();
+		String highid=schoolId.getHighid();
+		
+		if(index.equals("1")){
+			hakmungu=schemt; 
+			count=dbPro.findFriendCount("초등학교", friendName, emtid, midid, highid);
+			if(count>0){
+			articleList = dbPro.findFriendList(startRow, endRow, friendName, "초등학교", emtid, midid, highid);
+			}
+		}
+		if(index.equals("2")){
+			hakmungu=schmid;
+			count=dbPro.findFriendCount("중학교", friendName, emtid, midid, highid);
+			if(count>0){
+			articleList = dbPro.findFriendList(startRow, endRow, friendName, "중학교", emtid, midid, highid);
+			}
+		}
+		if(index.equals("3")){
+			hakmungu=schhigh;
+			count=dbPro.findFriendCount("고등학교", friendName, emtid, midid, highid);
+			if(count>0){
+			articleList = dbPro.findFriendList(startRow, endRow, friendName, "고등학교", emtid, midid, highid);
+			}
+		}
+		number = count - (currentPage - 1) * pageSize;
+		
+		int bottomLine = 5;
+		if (count > 0) {
+			int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
+			int startPage = 1 + (currentPage - 1) / bottomLine * bottomLine;
+			int endPage = startPage + bottomLine - 1;
+			if (endPage > pageCount)
+				endPage = pageCount;
+			request.setAttribute("startPage", startPage);
+			request.setAttribute("endPage", endPage);
+			}
+		
+		request.setAttribute("index", index);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("bottomLine", bottomLine);
+		request.setAttribute("count", count);
+		request.setAttribute("hakmungu", hakmungu);
+		request.setAttribute("articleList", articleList);
+		request.setAttribute("number", number);
+		
+		
+		
+			 return "/board/searchFriend.jsp"; 
+	} 
 	//라운지
 	public String lounge(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 

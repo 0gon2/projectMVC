@@ -378,7 +378,8 @@ public class MemberDAO {
 	
 	//학교 명단 추출하는 메소드
 	@SuppressWarnings("resource")
-	public List getSchoolmate(int startRow, int endRow, String sname, String sclass) {
+	public List getSchoolmate(int startRow, int endRow, String emtid,
+			String midid, String highid, String sclass) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -391,11 +392,11 @@ public class MemberDAO {
 				sql = " select * from (select rownum rnum ,a.* from "
 						+ "(select m.name, m.birthday,m.joindate, m.memberid, "
 						+ "m.sch_emt, m.sch_mid, m.sch_high"
-						+ " from MEMBER m, SCHOOL s where m.emtid=s.sid and m.sch_emt=? "
+						+ " from MEMBER m, SCHOOL s where m.emtid=s.sid and sid=? "
 						+ "order by joindate desc) "
 						+ "	a ) where rnum  between ? and ? ";
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, sname);
+				pstmt.setString(1, emtid);
 				pstmt.setInt(2, startRow);
 				pstmt.setInt(3, endRow);
 				
@@ -404,11 +405,11 @@ public class MemberDAO {
 				sql = " select * from (select rownum rnum ,a.* from "
 						+ "(select m.name, m.birthday,m.joindate, m.memberid, "
 						+ "m.sch_emt, m.sch_mid, m.sch_high"
-						+ " from MEMBER m, SCHOOL s where m.emtid=s.sid and m.sch_mid=? "
+						+ " from MEMBER m, SCHOOL s where m.midid=s.sid and sid=? "
 						+ "order by joindate desc) "
 						+ "	a ) where rnum  between ? and ? ";
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, sname);
+				pstmt.setString(1, midid);
 				pstmt.setInt(2, startRow);
 				pstmt.setInt(3, endRow);
 			}
@@ -416,11 +417,11 @@ public class MemberDAO {
 				sql = " select * from (select rownum rnum ,a.* from "
 						+ "(select m.name, m.birthday,m.joindate, m.memberid, "
 						+ "m.sch_emt, m.sch_mid, m.sch_high"
-						+ " from MEMBER m, SCHOOL s where m.emtid=s.sid and m.sch_high=? "
+						+ " from MEMBER m, SCHOOL s where m.highid=s.sid and sid=? "
 						+ "order by joindate desc) "
 						+ "	a ) where rnum  between ? and ? ";
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, sname);
+				pstmt.setString(1, highid);
 				pstmt.setInt(2, startRow);
 				pstmt.setInt(3, endRow);
 			}
@@ -557,7 +558,7 @@ public class MemberDAO {
 	}
 	//동창 인원수 체크
 	@SuppressWarnings("resource")
-	public int getSchoolmateCount(String sclass, String schemt, String schmid, String schhigh) {
+	public int getSchoolmateCount(String sclass, String emtid, String midid, String highid) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -569,25 +570,25 @@ public class MemberDAO {
 				sql = "select nvl(count(*),0) from "
 						+ "(SELECT m.name, m.birthday,m.joindate " + 
 						"from MEMBER m, SCHOOL s "
-						+ "where m.emtid=s.sid and m.sch_emt=?)";
+						+ "where m.emtid=s.sid and sid=?)";
 				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, schemt);
+				pstmt.setString(1, emtid);
 			}
 			if(sclass.equals("중학교")) {
 				sql = "select nvl(count(*),0) from "
 						+ "(SELECT m.name, m.birthday,m.joindate " + 
 						"from MEMBER m, SCHOOL s "
-						+ "where m.emtid=s.sid and m.sch_mid=?)";
+						+ "where m.midid=s.sid and sid=?)";
 				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, schmid);
+				pstmt.setString(1, midid);
 			}
 			if(sclass.equals("고등학교")) {
 				sql = "select nvl(count(*),0) from "
 						+ "(SELECT m.name, m.birthday,m.joindate " + 
 						"from MEMBER m, SCHOOL s "
-						+ "where m.emtid=s.sid and m.sch_high=?)";
+						+ "where m.highid=s.sid and sid=?)";
 				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, schhigh);
+				pstmt.setString(1, highid);
 			}
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -601,6 +602,129 @@ public class MemberDAO {
 		}
 		return number;
 	}
+	public List findFriendList(int startRow, int endRow, String name, String sclass, String emtid, String midid, String highid ) {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List articleList = null;
+		String sql = "";
+		
+		try {
+			conn = getConnection();
+			if(sclass.equals("초등학교")) {
+				sql = " select * from (select rownum rnum ,a.* from "
+						+ "(SELECT memberid,sch_emt, sch_mid, sch_high, name, birthday, joindate "
+						+ "FROM MEMBER m, school s "
+						+ "where m.emtid=s.sid and name=? and sid=? "
+						+ "order by joindate desc)"
+						+ "	a ) where rnum  between ? and ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, emtid);
+				pstmt.setInt(3, startRow);
+				pstmt.setInt(4, endRow);
+				
+			}
+			if(sclass.equals("중학교")) {
+				sql = " select * from (select rownum rnum ,a.* from "
+						+ "(SELECT memberid,sch_emt, sch_mid, sch_high, name, birthday, joindate "
+						+ "FROM MEMBER m, school s "
+						+ "where m.midid=s.sid and name=? and sid=?"
+						+ "order by joindate desc)"
+						+ "	a ) where rnum  between ? and ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, midid);
+				pstmt.setInt(3, startRow);
+				pstmt.setInt(4, endRow);
+			}
+			if(sclass.equals("고등학교")) {
+				sql = " select * from (select rownum rnum ,a.* from "
+						+ "(SELECT memberid,sch_emt, sch_mid, sch_high ,name, birthday, joindate "
+						+ "FROM MEMBER m, school s "
+						+ "where m.highid=s.sid and name=? and sid=? "
+						+ "order by joindate desc)"
+						+ "	a ) where rnum  between ? and ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, highid);
+				pstmt.setInt(3, startRow);
+				pstmt.setInt(4, endRow);
+			}
+		
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				articleList = new ArrayList();
+				do {
+					SmemberVO article = new SmemberVO();
+					
+					article.setName(rs.getString("name"));
+					article.setBirthday(rs.getInt("birthday"));
+					article.setJoindate(rs.getDate("joindate"));
+					article.setMemberid(rs.getString("memberid"));
+					article.setSch_emt(rs.getString("sch_emt"));
+					article.setSch_mid(rs.getString("sch_mid"));
+					article.setSch_high(rs.getString("sch_high"));
+					
+					articleList.add(article);
+				} while (rs.next());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return articleList;
+	}
+	@SuppressWarnings("resource")
+	public int findFriendCount(String sclass, String name, String emtid, String midid, String highid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql=null;
+		int number = 0;
+		try {
+			con=getConnection();
+			if(sclass.equals("초등학교")) {
+				sql = "SELECT nvl(count(*),0) "
+						+ "FROM MEMBER m, school s where "
+						+ "m.emtid=s.sid and name=? and sid=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, emtid);
+			}
+			if(sclass.equals("중학교")) {
+				sql = "SELECT nvl(count(*),0) "
+						+ "FROM MEMBER m, school s where "
+						+ "m.midid=s.sid and name=? and sid=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, midid);
+			}
+			if(sclass.equals("고등학교")) {
+				sql = "SELECT nvl(count(*),0) "
+						+ "FROM MEMBER m, school s where "
+						+ "m.highid=s.sid and name=? and sid=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, name);
+				pstmt.setString(2, highid);
+			}
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				number = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			close(con, pstmt, rs);
+		}
+		return number;
+	}
+	
+	
+	
+	
 	
 	public int reqeustCount(String myid) {
 		Connection con = null;
@@ -682,6 +806,31 @@ public class MemberDAO {
 		}
 		return article;
 	}
-	
-	
+	//학교 id를 가지고 오는 메소드
+	public MemberVO getSchoolId(String memberid) {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		MemberVO article = null;
+		String sql = "";
+		try {
+			conn = getConnection();
+			sql = "select emtid, midid, highid "
+					+ "from member where memberid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,memberid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				article = new MemberVO();
+				article.setEmtid(rs.getString("emtid"));
+				article.setMidid(rs.getString("midid"));
+				article.setHighid(rs.getString("highid"));
+				}
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return article;
+	}
 }

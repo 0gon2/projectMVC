@@ -1,3 +1,8 @@
+<%@page import="java.io.IOException"%>
+<%@page import="org.jsoup.select.Elements"%>
+<%@page import="org.jsoup.nodes.Element"%>
+<%@page import="org.jsoup.nodes.Document"%>
+<%@page import="org.jsoup.Jsoup"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,7 +24,11 @@
 #me { position : relative; 	left: 30px;}
 #you { position : relative; left: 200px;}
 html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
-
+/* body {
+       background-image: url("/projectMVC/images/background.jpg");
+      background-size: cover;
+      background-attachment: fixed;
+       } */
 </style>
 
 <body class="w3-theme-l5">
@@ -92,7 +101,9 @@ style="z-index:3;width:260px;" id="mySidebar">
   <!-- 프로필 -->
      <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px; margin-top:10px">
     <button onclick="document.getElementById('id01').style.display='block'" 
- 			 class="w3-button w3-green w3-large" style="width:120px">채팅하기</button>
+ 			 class="w3-button w3-green w3-large w3-half" >채팅하기</button>
+    <button onclick="window.location='gogame'" 
+ 			 class="w3-button w3-red w3-large w3-half"  >게임하기</button>
       </div>
       <div id="id01" class="w3-modal">
     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:400px">

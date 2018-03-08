@@ -6,7 +6,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+.w3-main{
+       background-image: url("/projectMVC/fileSave/${otherBackground}");
+      background-attachment: fixed; 
+      }
 
+</style>
 </head>
 <body>
 
@@ -17,21 +23,21 @@ style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
      <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px;margin-top:5px">
         <div class="w3-container">
          <h4 class="w3-center">Other Profile</h4>
-        <c:if test="${profile==null }">
+        <c:if test="${otherProfile==null }">
          <p class="w3-center">
          <img src="/projectMVC/images/defaultprofile.png" 
          class="w3-circle" style="height:130px;width:130px" ></p>
          </c:if>
-         <c:if test="${profile!=null }">
+         <c:if test="${otherProfile!=null }">
          <p class="w3-center">
-         <img src="/projectMVC/fileSave/${profile}" 
+         <img src="/projectMVC/fileSave/${otherProfile}" 
          class="w3-circle" style="height:130px;width:130px" ></p>
          </c:if>
          <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> ${name }</p>
          <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
-         <a href="schoolBoard">${aditemt}</a>, 
-         <a href="schoolBoard?index=2">${aditmid}</a>,
-         <a href="schoolBoard?index=3">${adithigh}</a></p>
+         ${aditemt}, 
+         ${aditmid},
+         ${adithigh}</p>
          <p ><i class="fa fa-male fa-fw "></i>&nbsp;&nbsp;&nbsp;
   			<select onchange="window.location='mainPage?pageId='+this.value">
   			  <option  value="">&nbsp;[친구목록]&nbsp;</option>
@@ -50,7 +56,6 @@ style="z-index:3;width:260px; margin-top:13px; " id="mySidebar">
         <div class="w3-card w3-round w3-light-white w3-center">
         <div class="w3-container">
           <p>동창을 찾습니다</p>
-          <img src="/w3images/forest.jpg" alt="Forest" style="width:100%;">
           <p><strong>Holiday</strong></p>
           <p>Friday 15:00</p>
           <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
@@ -156,31 +161,36 @@ style="cursor:pointer" title="close side menu" id="myOverlay"></div>
       <!--친구추가하기   -->
       
       <div class="w3-card w3-round w3-white w3-center">
-	        <div class="w3-container">
-	          <p>친구추가하기</p>
-	          <img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>
-	          <span>Jane Doe</span>
-	          <div class="w3-row w3-opacity">
-	            <div class="w3-half">
+	        <div class="w3-container" >
+	          <div class="w3-row " >
+	            <div >
 	            <c:if test="${statement==1}">
+		          <font size="3px" class="w3-center">&nbsp;&nbsp;|추가하기|</font>
 	            	<form action="mainPage">
+	            		<img alt="" src="/projectMVC/images/request.png" style="width:80%;height:150px;">
 	            		<input type="hidden" value="${pageId}" name="pageId">
 	            		<input type="hidden" value="1" name="addReq">
-	            		<input type="submit" value="친구추가">
+	            		<input class="w3-button w3-blue w3-round" style="width:100%;" type="submit" value="친구추가">
 	            	</form>
 	            </c:if>
 	            <c:if test="${statement==2}">
-	            	요청대기중
+		          <font size="3px" class="w3-center">&nbsp;&nbsp;|기다리기|</font>
+	            	<img alt="" src="/projectMVC/images/wait.png" style="width:80%;height:150px;">
+	            	<div class="w3-round w3-blue">요청대기중..</div>
 	            </c:if>
 	             <c:if test="${statement==3}">
+	            	 <font size="3px" class="w3-center">&nbsp;&nbsp;|친구 요청|</font>
 	            	<form action="mainPage">
+	            		<img alt="" src="/projectMVC/images/response.jpg" style="width:100%;height:150px;">
 	            		<input type="hidden" value="${pageId}" name="pageId">
 	            		<input type="hidden" value="1" name="acceptReq">
-	            		<input type="submit" value="수락하기">
+	            		<input class="w3-button w3-blue w3-round" style="width:100%;" type="submit" value="수락하기">
 	            	</form>
 	            </c:if>
 	             <c:if test="${statement==4}">
-	            	친구관계
+	            	<font size="3px" class="w3-center">&nbsp;&nbsp;|친구|</font>
+	            	<img alt="" src="/projectMVC/images/friend.jpg" style="width:80%;height:150px;">
+	            	<div class="w3-round w3-blue">친구 관계</div>
 	            </c:if>
 	            
 	            </div>

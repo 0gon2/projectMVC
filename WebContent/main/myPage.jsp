@@ -28,7 +28,7 @@ style="z-index:3;width:260px; margin-top:13px" id="mySidebar">
          </c:if>
          <c:if test="${myProfile!=null }">
          <p class="w3-center">
-         <img src="/projectMVC/fileSave/${myProfile}" 
+         <img src="/projectMVC/fileSave/${myProfile}"  
          class="w3-circle" style="height:130px;width:130px" ></p>
          </c:if>
          <hr>
@@ -171,8 +171,8 @@ style="cursor:pointer" title="close side menu" id="myOverlay"></div>
   </div>
 <footer class="w3-panel w3-padding-32 w3-card-4 w3-light-grey w3-center w3-opacity">
   <p><nav>
-  <a href="/forum/default.asp" target="_blank">FORUM</a> |
-  <a href="/about/default.asp" target="_top">ABOUT</a>
+  <a href="#" target="_blank">FORUM</a> |
+  <a href="#" target="_top">ABOUT</a>
   </nav></p>
 </footer>
 

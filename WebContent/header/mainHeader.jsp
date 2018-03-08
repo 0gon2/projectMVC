@@ -60,7 +60,6 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
     </div>
     </c:if>
   </div>
-   <!-- 알림창 -->
   
   <!--해더 오른쪽 위 설정  -->
   	<div class="w3-dropdown-hover w3-hide-medium w3-right">

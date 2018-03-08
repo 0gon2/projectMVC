@@ -7,17 +7,16 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
 <body>
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-<div class="w3-main w3-container" style="margin-left:260px;margin-top:90px;">
+<div class="w3-main w3-container" style="margin-left:270px;margin-top:117px;">
 <div class="w3-panel w3-padding-large w3-card-4 w3-light-grey">
 		<span class="w3-center  w3-large">
 		</span>
 		<c:if test="${count==0 }">
 			<table class="w3-table-all" >
 				<tr class="w3-blue">
-				<td align="center">한명도 없을리가...</td>
+				<td align="center">검색된 친구가 없습니다.</td>
 			</table>
 		</c:if>
 		<c:if test="${count!=0 }">
@@ -55,34 +54,31 @@
 		<div class="w3-center">
 		<c:if test="${count>0 }">
 			<c:if test="${startPage>bottomLine }">
-			<a href="schoolBoard?pageNum=${startPage - bottomLine}&index=${index }">[이전]</a>
+			<a href="searchFriend?pageNum=${startPage - bottomLine}&index=${index }">[이전]</a>
 			</c:if>
 			
 			<c:forEach var="i" begin="${startPage }" end="${endPage}">
-			<a href="schoolBoard?pageNum=${i }&index=${index}">
+			<a href="searchFriend?pageNum=${i }&index=${index}">
 					<c:if test="${i!=currentPage }">[${i}]</c:if>
 				<c:if test="${i==currentPage }">[${i}]
 				<font color='red'></font></c:if>
  			</a>
 			</c:forEach>
 			<c:if test="${endPage<pageCount }">
-				<a href="schoolBoard?pageNum=${startPage + bottomLine}&index=${index }">[다음]</a>
+				<a href="searchFriend?pageNum=${startPage + bottomLine}&index=${index }">[다음]</a>
 			</c:if>
 			
 		</c:if>
 		
 		</div>
 		<div class="w3-right">
-		  <form action="searchFriend">
+		    <form action="searchFriend">
      		 <input type="text" placeholder="Friend name" name="friendName">
      		 <input type="hidden" value=${index } name="index">
      		 <input type="submit" class="w3-button w3-blue" value="검색">
    		 </form>
 		</div>	
 </div>
-<div class="w3-container">&nbsp;</div>
-<div class="w3-container">&nbsp;</div>
-<div class="w3-container">&nbsp;</div>
 <footer class="w3-panel w3-padding-32 w3-card-4 w3-light-grey w3-center w3-opacity">
   <p><nav>
   <a href="#" target="_blank">FORUM</a> |
@@ -90,6 +86,7 @@
   </nav></p>
 </footer>
 </div>
+
 <script>
 // Script to open and close the sidebar
 function w3_open() {

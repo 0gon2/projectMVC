@@ -17,6 +17,10 @@
 .w3-code{border-left:4px solid #4CAF50}
 .myMenu {margin-bottom:150px}
 html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
+body{
+       background-image: url("/projectMVC/images/background.jpg");
+      }
+
 
 </style>
 
