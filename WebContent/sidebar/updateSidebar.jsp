@@ -143,7 +143,7 @@ style="z-index:3;width:260px; margin-top:13px" id="mySidebar">
 		    <div class="w3-bar-block w3-padding-large w3-medium">
 		      <a href="#" class="w3-bar-item w3-button">회원정보 변경</a>
 		      <a href="#" class="w3-bar-item w3-button">비밀번호 변경</a>
-		      <a href="#" class="w3-bar-item w3-button">탈퇴하기</a>
+		      <a href="leave" class="w3-bar-item w3-button">탈퇴하기</a>
 		    </div>
 		   
 		  	</div>

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import board.BoardDataBean;
+
 
 
 
@@ -798,6 +800,32 @@ public class MemberDAO {
 				article.setSch_mid(rs.getString("sch_mid"));
 				article.setSch_high(rs.getString("sch_high"));
 				article.setBirthday(rs.getInt("birthday"));
+				}
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			close(conn, pstmt, rs);
+		}
+		return article;
+	}
+	
+	
+	
+	public BoardDataBean getHot() {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		BoardDataBean article = null;
+		String sql = "";
+		try {
+			conn = getConnection();
+			sql = "select subject "
+					+ "from board where boardid=1 and readcount>20";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				article = new BoardDataBean();
+				article.setSubject(rs.getString("subject"));
 				}
 		} catch (Exception e) {
 			e.getStackTrace();

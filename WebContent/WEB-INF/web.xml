@@ -28,6 +28,13 @@
   	</jsp-property-group>
   	
   	<jsp-property-group>
+  	<url-pattern>/Replyboard/*</url-pattern>
+  	<include-prelude>/sidebar/boardSidebar.jsp</include-prelude>
+  	</jsp-property-group>
+  	
+  	
+  	
+  	<jsp-property-group>
   	<url-pattern>/lounge/*</url-pattern>
   	<include-prelude>/header/loungeHeader.jsp</include-prelude>
   	</jsp-property-group>

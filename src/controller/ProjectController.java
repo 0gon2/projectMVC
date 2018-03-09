@@ -16,6 +16,8 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.sist.msk.Action;
 
+import board.BoardDBBean;
+import board.BoardDataBean;
 import guestbook.MessageDAO;
 import guestbook.MessageVO;
 import guestbook.service.GetMessageListService;
@@ -172,14 +174,59 @@ public class ProjectController extends Action {
 				response.sendRedirect(request.getContextPath()+"/gon/updateForm");
 				 return null; 
 				}
-	
-	
+	public String leave(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable { 
+			 return "/main/leave.jsp"; 
+			} 
 	public String loginForm(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable { 
 			 return "/start/loginForm.jsp"; 
 			} 
 	
-	
+	public String list(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		String boardid = request.getParameter("boardid");
+		if (boardid == null)
+			boardid = "1";
+		int pageSize = 5;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String pageNum = request.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		int currentPage = Integer.parseInt(pageNum);
+		int startRow = (currentPage - 1) * pageSize + 1;
+		int endRow = currentPage * pageSize;
+		int count = 0;
+		int number = 0;
+		List articleList = null;
+		BoardDBBean dbPro = BoardDBBean.getInstance();
+		count = dbPro.getArticleCount(boardid);
+		if (count > 0) {
+			articleList = dbPro.getArticles(startRow, endRow, boardid);
+		}
+		number = count - (currentPage - 1) * pageSize;
+		
+		int bottomLine = 3;
+		int pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
+		int startPage = 1 + (currentPage - 1) / bottomLine * bottomLine;
+		int endPage = startPage + bottomLine - 1;
+		if (endPage > pageCount)
+			endPage = pageCount;
+		
+		request.setAttribute("boardid",boardid);
+		request.setAttribute("pageCount",pageCount);
+		request.setAttribute("endPage",endPage);
+		request.setAttribute("bottomLine",bottomLine);
+		request.setAttribute("startPage",startPage);
+		request.setAttribute("currentPage",currentPage);
+		request.setAttribute("sdf",sdf);
+		request.setAttribute("articleList",articleList);
+		request.setAttribute("number",number);
+		request.setAttribute("count",count);
+		
+			 return "/Replyboard/list.jsp"; 
+			} 
 	public String logout(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable {
 		HttpSession session = request.getSession();
@@ -187,6 +234,203 @@ public class ProjectController extends Action {
 		response.sendRedirect(request.getContextPath()+"/gon/loginForm");
 			 return null; 
 			} 
+	
+	public String deletePro(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		String boardid = request.getParameter("boardid");
+		if (boardid == null)
+			boardid = "1";
+		String pageNum = request.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		BoardDataBean article=new BoardDataBean();
+	      if(request.getParameter("num")!=null && !request.getParameter("num").equals("")) {
+	      article.setNum(Integer.parseInt(request.getParameter("num")));
+	      article.setRef(Integer.parseInt(request.getParameter("ref")));
+	      article.setRe_step(Integer.parseInt(request.getParameter("re_step")));
+	      article.setRe_level(Integer.parseInt(request.getParameter("re_level")));
+	      }
+	      
+	      article.setWriter(request.getParameter("writer"));
+	      article.setEmail(request.getParameter("email"));
+	      article.setSubject(request.getParameter("subject"));
+	      article.setPasswd(request.getParameter("passwd"));
+	      article.setContent(request.getParameter("content"));
+	      article.setIp(request.getRemoteAddr());
+	      
+		int num = Integer.parseInt(request.getParameter("num"));
+		String passwd = request.getParameter("passwd");
+		
+		BoardDBBean dbPro = BoardDBBean.getInstance();
+		article.setIp(request.getRemoteAddr());
+		int deleteCount = dbPro.deleteArticle(num,passwd,boardid);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("deleteCount", deleteCount);
+		return "/Replyboard/deletePro.jsp";
+			} 
+	
+	
+	public String deleteForm(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+
+			
+		request.setAttribute("num", num);
+		request.setAttribute("pageNum", pageNum);
+			return "/Replyboard/deleteForm.jsp";
+			} 
+	
+	public String nupdatePro(HttpServletRequest req,
+			 HttpServletResponse response)  throws Throwable {
+		String boardid = req.getParameter("boardid");
+		if (boardid == null)
+			boardid = "1";
+		String pageNum = req.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		
+			BoardDataBean article=new BoardDataBean();
+	      if(req.getParameter("num")!=null && !req.getParameter("num").equals("")) {
+	      article.setNum(Integer.parseInt(req.getParameter("num")));
+	      article.setRef(Integer.parseInt(req.getParameter("ref")));
+	      article.setRe_step(Integer.parseInt(req.getParameter("re_step")));
+	      article.setRe_level(Integer.parseInt(req.getParameter("re_level")));
+	      }
+	      
+	      article.setWriter(req.getParameter("writer"));
+	      article.setEmail(req.getParameter("email"));
+	      article.setSubject(req.getParameter("subject"));
+	      article.setPasswd(req.getParameter("passwd"));
+	      article.setContent(req.getParameter("content"));
+	      article.setIp(req.getRemoteAddr());
+			BoardDBBean dbPro = BoardDBBean.getInstance();
+			int updateCount = dbPro.updateArticle(article);
+		System.out.println(updateCount);
+		req.setAttribute("updateCount", updateCount);
+		req.setAttribute("pageNum", pageNum);
+		
+		
+			return "/Replyboard/updatePro.jsp";
+			} 
+	
+	public String content(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+
+		String boardid = request.getParameter("boardid");
+		if (boardid == null)
+			boardid = "1";
+	
+		int num = Integer.parseInt(request.getParameter("num"));
+
+		String pageNum = request.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		try {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		BoardDBBean dbPro = BoardDBBean.getInstance();
+		BoardDataBean article = dbPro.getArticle(num, boardid,"content");
+		int ref = article.getRef();
+		int re_step = article.getRe_step();
+		int re_level = article.getRe_level();
+		request.setAttribute("article", article);
+		request.setAttribute("ref", ref);
+		request.setAttribute("re_step", re_step);
+		request.setAttribute("re_level", re_level);
+		}catch(Exception e) {
+			e.getMessage();
+		}
+		request.setAttribute("num", num);
+		request.setAttribute("boardid", boardid);
+		request.setAttribute("pageNum", pageNum);
+		
+			 return "/Replyboard/content.jsp"; 
+			} 
+	public String writePro(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		 String pageNum = request.getParameter("pageNum");
+	      String boardid = request.getParameter("boardid");
+	      if(pageNum==null||pageNum=="") pageNum="1";
+	      BoardDataBean article=new BoardDataBean();
+	      if(request.getParameter("num")!=null && !request.getParameter("num").equals("")) {
+	      article.setNum(Integer.parseInt(request.getParameter("num")));
+	      article.setRef(Integer.parseInt(request.getParameter("ref")));
+	      article.setRe_step(Integer.parseInt(request.getParameter("re_step")));
+	      article.setRe_level(Integer.parseInt(request.getParameter("re_level")));
+	      }
+	      
+	      article.setWriter(request.getParameter("writer"));
+	      article.setEmail(request.getParameter("email"));
+	      article.setSubject(request.getParameter("subject"));
+	      article.setPasswd(request.getParameter("passwd"));
+	      article.setContent(request.getParameter("content"));
+	      article.setBoardid(boardid);
+	      article.setIp(request.getRemoteAddr());
+	      
+	      
+	      System.out.println(article);
+	      BoardDBBean dbPro = BoardDBBean.getInstance();
+	      dbPro.insertArticle(article);
+	      request.setAttribute("pageNum", pageNum);//이부분 다시보기
+	      request.setAttribute("boardid", boardid);//이부분 다시보기
+	      response.sendRedirect(request.getContextPath()+"/gon/list?pageNum="+pageNum+"&boardid="+boardid);
+			 return null; 
+			} 
+	
+	
+	
+	
+	public String writeForm(HttpServletRequest request,
+			 HttpServletResponse response)  throws Throwable {
+		int num = 0, ref = 0, re_step = 0, re_level = 0;
+		String boardid = request.getParameter("boardid");
+		if(boardid==null||boardid.equals("")) {
+			boardid="1";
+		}
+		if (request.getParameter("num") != null) {
+			num = Integer.parseInt(request.getParameter("num"));
+			ref = Integer.parseInt(request.getParameter("ref"));
+			re_level = Integer.parseInt(request.getParameter("re_level"));
+			re_step = Integer.parseInt(request.getParameter("re_step"));
+		}
+		
+		request.setAttribute("boardid",boardid);
+		request.setAttribute("num",num);
+		request.setAttribute("ref",ref);
+		request.setAttribute("re_step",re_step);
+		request.setAttribute("re_level",re_level);
+		request.setAttribute("pageNum",1);
+		
+			 return "/Replyboard/writeForm.jsp"; 
+			}
+	public String nupdateForm(HttpServletRequest req,
+			 HttpServletResponse response)  throws Throwable {
+		String boardid = req.getParameter("boardid");
+		if (boardid == null)
+			boardid = "1";
+		String pageNum = req.getParameter("pageNum");
+		if (pageNum == null || pageNum == "") {
+			pageNum = "1";
+		}
+		
+		int num = Integer.parseInt(req.getParameter("num"));
+		try {
+			BoardDBBean dbPro = BoardDBBean.getInstance();
+			BoardDataBean article = dbPro.getArticle(num, boardid, "update");
+			req.setAttribute("article", article);
+		}catch (Exception e) {
+		}
+		
+		req.setAttribute("boardid", boardid);
+		req.setAttribute("pageNum", pageNum);
+		
+			 return "/Replyboard/update.jsp"; 
+			} 
+	
+	
 	public String gogame(HttpServletRequest request,
 			 HttpServletResponse response)  throws Throwable {
 		HttpSession session=request.getSession();
@@ -254,7 +498,8 @@ public class ProjectController extends Action {
 		String myBackground=null;
 		String otherProfile=null;
 		String otherBackground=null;
-	
+		BoardDataBean hotarticle = dbPro.getHot();
+		
 		if(pageId.equals(myId)) {
 			String schemt=(String)session.getAttribute("schemt");
 			String schmid=(String)session.getAttribute("schmid");
@@ -276,6 +521,7 @@ public class ProjectController extends Action {
 			request.setAttribute("aditmid", aditmid);
 			request.setAttribute("adithigh", adithigh);
 			request.setAttribute("pageId", pageId);
+			request.setAttribute("hotarticle", hotarticle);
 			return "/main/myPage.jsp"; 
 		}
 		else {
@@ -338,6 +584,7 @@ public class ProjectController extends Action {
 			request.setAttribute("name", name);
 			request.setAttribute("pageId", pageId);
 			
+			request.setAttribute("hotarticle", hotarticle);
 			request.setAttribute("aditemt", aditemt);
 			request.setAttribute("aditmid", aditmid);
 			request.setAttribute("adithigh", adithigh);

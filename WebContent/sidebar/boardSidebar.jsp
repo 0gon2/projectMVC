@@ -19,6 +19,7 @@
 html,body,h1,h2,h3,h4,h5 {font-family: "Jeju Hallasan", sans-serif}
 body{
        background-image: url("/projectMVC/images/background.jpg");
+       font-family: "Jeju Hallasan", sans-serif
       }
 
 
@@ -97,7 +98,14 @@ body{
   </ul>
   </div>
   </div>
+   <div class="w3-card w3-round w3-white" style="width:240px; margin-left:10px">
+    <h4 class="w3-center">&lt;게시판&gt;</h4>
+    <ul>
+   	 <li><a class="w3-bar-item w3-button" href="list">일반게시판</a></li>
+   	</ul>
+   	</div>
   </div>
+  
 </div>
   
 
